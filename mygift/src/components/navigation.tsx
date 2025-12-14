@@ -12,10 +12,27 @@ export default function Navigation() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playlist = [
-    { title: "XION - MARINIG", src: "/XION. - marininig.mp3", img: "/test.jpg" },
-    { title: "Jingle Bells", src: "/audio/jingle-bells.mp3", img: "/covers/jingle-bells.jpg" },
-    { title: "Silent Night", src: "/audio/silent-night.mp3", img: "/covers/silent-night.jpg" }
-  ];
+  { title: "ILYSB",                              src: "/audio/ilysb.mp3",                              img: "/covers/ilysb.jpg" },
+  { title: "Super Far",                          src: "/audio/super-far.mp3",                          img: "/covers/super-far.jpg" },
+  { title: "Good Girls",                         src: "/audio/good-girls.mp3",                         img: "/covers/good-girls.jpg" },
+  { title: "good guys",                          src: "/audio/good-guys.mp3",                          img: "/covers/good-guys.jpg" },
+  { title: "13",                                 src: "/audio/13.mp3",                                 img: "/covers/13.jpg" },
+  { title: "Hericane",                           src: "/audio/hericane.mp3",                           img: "/covers/hericane.jpg" },
+  { title: "Thick and Thin",                     src: "/audio/thick-and-thin.mp3",                     img: "/covers/thick-and-thin.jpg" },
+  { title: "If You See Her",                     src: "/audio/if-you-see-her.mp3",                     img: "/covers/if-you-see-her.jpg" },
+  { title: "I Don’t Wanna Love You Anymore",     src: "/audio/i-dont-wanna-love-you-anymore.mp3",      img: "/covers/i-dont-wanna-love-you-anymore.jpg" },
+  { title: "Let Me Know",                        src: "/audio/let-me-know.mp3",                        img: "/covers/let-me-know.jpg" },
+  { title: "Valentine’s Day",                    src: "/audio/valentines-day.mp3",                     img: "/covers/valentines-day.jpg" },
+  { title: "Thru These Tears",                   src: "/audio/thru-these-tears.mp3",                   img: "/covers/thru-these-tears.jpg" },
+  { title: "Malibu Nights",                      src: "/audio/malibu-nights.mp3",                      img: "/covers/malibu-nights.jpg" },
+  { title: "you!",                               src: "/audio/you.mp3",                                img: "/covers/you.jpg" },
+  { title: "cowboy in LA",                       src: "/audio/cowboy-in-la.mp3",                       img: "/covers/cowboy-in-la.jpg" },
+  { title: "if this is the last time",           src: "/audio/if-this-is-the-last-time.mp3",           img: "/covers/if-this-is-the-last-time.jpg" },
+  { title: "Heart Won’t Let Me",                 src: "/audio/heart-wont-let-me.mp3",                  img: "/covers/heart-wont-let-me.jpg" },
+  { title: "Mean It (with Lauv)",                src: "/audio/mean-it.mp3",                            img: "/covers/mean-it.jpg" },
+  { title: "dancing in the kitchen",             src: "/audio/dancing-in-the-kitchen.mp3",             img: "/covers/dancing-in-the-kitchen.jpg" },
+  { title: "never mind, let’s break up",         src: "/audio/never-mind-lets-break-up.mp3",           img: "/covers/never-mind-lets-break-up.jpg" }
+];
 
   useEffect(() => {
     setTyped(playlist[index]?.title || "");
