@@ -13,6 +13,7 @@ export default function Navigation() {
 
   const playlist = [
   { title: "LANY - ILYSB",                              src: "/ILYSB.mp3",                              img: "/ilysb.jpg" },
+    { title: "LANY - Stuck",                          src: "/stuck.mp3",                          img: "/stuck.png" },
   { title: "LANY - Know You Naked",                          src: "/know-you-naked.mp3",                          img: "/know-you-naked.jpg" },
   { title: "LANY - Super Far",                          src: "/super-far.mp3",                          img: "/super-far.jpg" },
   { title: "LANY - Last Forever",             src: "/last-forever.mp3",             img: "/last-forever.jpg" },
