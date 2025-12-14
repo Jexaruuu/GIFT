@@ -13,14 +13,14 @@ export default function Navigation() {
 
   const playlist = [
   { title: "LANY - ILYSB",                              src: "/ILYSB.mp3",                              img: "/ilysb.jpg" },
-    { title: "LANY - Stuck",                          src: "/stuck.mp3",                          img: "/stuck.png" },
+  { title: "LANY - Stuck",                          src: "/stuck.mp3",                          img: "/stuck.png" },
   { title: "LANY - Know You Naked",                          src: "/know-you-naked.mp3",                          img: "/know-you-naked.jpg" },
   { title: "LANY - Super Far",                          src: "/super-far.mp3",                          img: "/super-far.jpg" },
   { title: "LANY - Last Forever",             src: "/last-forever.mp3",             img: "/last-forever.jpg" },
   { title: "LANY - Good Girls",                         src: "/good-girls.mp3",                         img: "/good-girls.jpg" },
   { title: "LANY - good guys",                          src: "/good-guys.mp3",                          img: "/good-guys.jpg" },
   { title: "LANY - 13",                                 src: "/13.mp3",                                 img: "/13.jpg" },
-    { title: "LANY - Make Me Forget",                    src: "/make-me-forget.mp3",                     img: "/make-me-forget.jpg" },
+  { title: "LANY - Make Me Forget",                    src: "/make-me-forget.mp3",                     img: "/make-me-forget.jpg" },
   { title: "LANY - Hericane",                           src: "/hericane.mp3",                           img: "/hericane.jpg" },
   { title: "LANY - Thick and Thin",                     src: "/thick-and-thin.mp3",                     img: "/thick-and-thin.jpg" },
   { title: "LANY - If You See Her",                     src: "/if-you-see-her.mp3",                     img: "/if-you-see-her.jpg" },
@@ -30,8 +30,8 @@ export default function Navigation() {
   { title: "LANY - Malibu Nights",                      src: "/malibu-nights.mp3",                      img: "/malibu-nights.jpg" },
   { title: "LANY - you!",                               src: "/you.mp3",                                img: "/you.jpg" },
   { title: "LANY - cowboy in LA",                       src: "/cowboy-in-la.mp3",                       img: "/cowboy-in-la.jpg" },
-  { title: "LANY - Mean It (with Lauv)",                src: "/mean-it.mp3",                            img: "/mean-it.jpg" },
-    { title: "LANY - Destiny",                src: "/destiny.mp3",                            img: "/destiny.jpg" },
+  { title: "LANY - Mean It",                src: "/mean-it.mp3",                            img: "/mean-it.jpg" },
+  { title: "LANY - Destiny",                src: "/destiny.mp3",                            img: "/destiny.jpg" },
 ];
 
   useEffect(() => {
