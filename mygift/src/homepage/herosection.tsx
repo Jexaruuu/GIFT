@@ -248,7 +248,7 @@ export default function HeroSection() {
                         <div className="text-white/80 text-xs truncate">{slides[leftIdx]?.text}</div>
                       </div>
                       <div className="relative m-3 mt-2 rounded-xl overflow-hidden border border-white/20">
-                        <img src={slides[leftIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-[12px] sm:blur-[16px] scale-[1.05]" />
+                        <img src={slides[leftIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-md sm:blur-lg scale-[1.05]" />
                         <div className="absolute inset-0 grid place-items-center text-white/85 text-sm tracking-wide bg-black/50">Locked</div>
                         <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
                           {leftIdx + 1}/{len}
@@ -283,7 +283,7 @@ export default function HeroSection() {
                         <div className="text-white/80 text-xs truncate">{slides[rightIdx]?.text}</div>
                       </div>
                       <div className="relative m-3 mt-2 rounded-xl overflow-hidden border border-white/20">
-                        <img src={slides[rightIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-[12px] sm:blur-[16px] scale-[1.05]" />
+                        <img src={slides[rightIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-md sm:blur-lg scale-[1.05]" />
                         <div className="absolute inset-0 grid place-items-center text-white/85 text-sm tracking-wide bg-black/50">Locked</div>
                         <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
                           {rightIdx + 1}/{len}
