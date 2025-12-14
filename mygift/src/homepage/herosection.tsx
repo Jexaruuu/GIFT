@@ -213,12 +213,6 @@ export default function HeroSection() {
                 View Wishlist
               </button>
             </div>
-
-            <div className="mt-7 sm:mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm text-white/80">
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3">🎁 Gift ideas</div>
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3">❄️ Holiday mood</div>
-              <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3">⭐ Clean UI</div>
-            </div>
           </div>
 
           <div className="relative">
