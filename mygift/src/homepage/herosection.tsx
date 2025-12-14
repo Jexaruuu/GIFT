@@ -206,7 +206,7 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
-              <button className="w-full sm:w-auto inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]">
+              <button className="w-full sm:w-auto rounded-2xl px-5 py-3 font-semibold text-white bg-blue-500 hover:bg-blue-600 shadow-sm active:scale-[0.99]">
                 Explore Gifts
               </button>
               <button className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]">
