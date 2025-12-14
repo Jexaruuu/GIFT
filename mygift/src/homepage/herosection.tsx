@@ -207,10 +207,10 @@ export default function HeroSection() {
 
             <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
               <button className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]">
-                Explore Gifts
+                Open Surprise
               </button>
               <button className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]">
-                View Wishlist
+                Read Message
               </button>
             </div>
           </div>
