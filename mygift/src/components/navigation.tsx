@@ -32,7 +32,6 @@ export default function Navigation() {
   { title: "LANY - cowboy in LA",                       src: "/cowboy-in-la.mp3",                       img: "/cowboy-in-la.jpg" },
   { title: "LANY - Mean It (with Lauv)",                src: "/mean-it.mp3",                            img: "/mean-it.jpg" },
     { title: "LANY - Destiny",                src: "/destiny.mp3",                            img: "/destiny.jpg" },
-  { title: "LANY - dancing in the kitchen",             src: "/dancing-in-the-kitchen.mp3",             img: "/dancing-in-the-kitchen.jpg" },
 ];
 
   useEffect(() => {
