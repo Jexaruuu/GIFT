@@ -12,7 +12,7 @@ export default function Navigation() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playlist = [
-    { title: "XION - MARINIG", src: "/XION. - marininig.mp3", img: "/public/test.jpg" },
+    { title: "XION - MARINIG", src: "/XION. - marininig.mp3", img: "/test.jpg" },
     { title: "Jingle Bells", src: "/audio/jingle-bells.mp3", img: "/covers/jingle-bells.jpg" },
     { title: "Silent Night", src: "/audio/silent-night.mp3", img: "/covers/silent-night.jpg" }
   ];
