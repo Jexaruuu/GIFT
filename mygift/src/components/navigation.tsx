@@ -12,7 +12,7 @@ export default function Navigation() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playlist = [
-  { title: "ILYSB",                              src: "/audio/ilysb.mp3",                              img: "/covers/ilysb.jpg" },
+  { title: "ILYSB",                              src: "/ILYSB.mp3",                              img: "/ilysb.jpg" },
   { title: "Super Far",                          src: "/audio/super-far.mp3",                          img: "/covers/super-far.jpg" },
   { title: "Good Girls",                         src: "/audio/good-girls.mp3",                         img: "/covers/good-girls.jpg" },
   { title: "good guys",                          src: "/audio/good-guys.mp3",                          img: "/covers/good-guys.jpg" },
