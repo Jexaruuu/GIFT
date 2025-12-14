@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Navigation from "../components/navigation";
 import Footer from "../components/footer";
 
@@ -17,11 +17,7 @@ export default function HeroSection() {
     []
   );
 
-  const names = useMemo(
-    () => ["Yodaaaaaaaaaa!", "Jergennnnnnnnn!", "Aila Medel"],
-    []
-  );
-
+  const names = useMemo(() => ["Yodaaaaaaaaaa!", "Jergennnnnnnnn!", "Aila Medel"], []);
   const [nameIndex, setNameIndex] = useState(0);
   const [typed, setTyped] = useState("");
   const [phase, setPhase] = useState<"typing" | "pausing" | "deleting">("typing");
@@ -88,68 +84,50 @@ export default function HeroSection() {
     };
   }, []);
 
+  const slides = useMemo(
+    () => [
+      { img: "/yoda1.png", title: "To my favorite person", text: "This season, I hope you feel extra loved." },
+      { img: "/yoda2.png", title: "Little moments", text: "The small things we share are the biggest gifts." },
+      { img: "/yoda3.png", title: "Always cheering you on", text: "You’ve got this. I’m here, always." },
+      { img: "/yoda4.png", title: "Bright days ahead", text: "May every day bring you calm and joy." }
+    ],
+    []
+  );
+  const [openModal, setOpenModal] = useState(false);
+  const [idx, setIdx] = useState(0);
+  const len = slides.length;
+  const prev = () => setIdx((i) => (i - 1 + len) % len);
+  const next = () => setIdx((i) => (i + 1) % len);
+  const leftIdx = (idx - 1 + len) % len;
+  const rightIdx = (idx + 1) % len;
+
+  const areaRef = useRef<HTMLDivElement | null>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = areaRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    setTilt({ x: ((my / rect.height) - 0.5) * -8, y: ((mx / rect.width) - 0.5) * 8 });
+  };
+  const resetTilt = () => setTilt({ x: 0, y: 0 });
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-blue-800 font-[Poppins]">
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
-          @keyframes snowFall {
-            0% { transform: translateX(var(--drift, 0px)) translateY(-20vh); }
-            100% { transform: translateX(var(--drift, 0px)) translateY(120vh); }
-          }
-          @keyframes giftSoftShake {
-            0%, 40% { transform: translate3d(0,0,0) rotate(0deg); }
-            46% { transform: translate3d(3px, 0, 0) rotate(3deg); }
-            50% { transform: translate3d(0, 0, 0) rotate(0deg); }
-            54% { transform: translate3d(-3px, 0, 0) rotate(-3deg); }
-            58% { transform: translate3d(0, 0, 0) rotate(0deg); }
-            100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-          }
-          @keyframes caretBlink {
-            0%, 45% { opacity: 1; }
-            50%, 100% { opacity: 0; }
-          }
-
-          @media (pointer:fine) {
-            html, body { cursor: none; }
-          }
-          .x-cursor {
-            position: fixed;
-            left: 0; top: 0;
-            width: 40px; height: 40px;
-            transform: translate(-50%, -50%) scale(var(--scale,1));
-            background: url('/yodalove.gif') center/contain no-repeat;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
-            pointer-events: none;
-            transition: transform 120ms ease, opacity 120ms ease;
-            z-index: 9999;
-            opacity: var(--opacity, 0);
-            will-change: transform;
-          }
-          .x-cursor:after{
-            content:"";
-            position:absolute; inset:-6px;
-            border-radius:9999px;
-            background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0));
-            filter: blur(6px);
-            opacity:.6;
-          }
-          .x-ring {
-            position: fixed;
-            width: 10px; height: 10px;
-            transform: translate(-50%, -50%);
-            border-radius: 9999px;
-            border: 2px solid rgba(255,255,255,.7);
-            box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5);
-            pointer-events: none;
-            z-index: 9998;
-            animation: x-ping .6s ease-out forwards;
-          }
-          @keyframes x-ping {
-            0% { opacity: .9; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(5); }
-          }
+          @keyframes snowFall { 0% { transform: translateX(var(--drift, 0px)) translateY(-20vh); } 100% { transform: translateX(var(--drift, 0px)) translateY(120vh); } }
+          @keyframes giftSoftShake { 0%, 40% { transform: translate3d(0,0,0) rotate(0deg); } 46% { transform: translate3d(3px, 0, 0) rotate(3deg); } 50% { transform: translate3d(0, 0, 0) rotate(0deg); } 54% { transform: translate3d(-3px, 0, 0) rotate(-3deg); } 58% { transform: translate3d(0, 0, 0) rotate(0deg); } 100% { transform: translate3d(0, 0, 0) rotate(0deg); } }
+          @keyframes caretBlink { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
+          @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); } }
+          @keyframes glowPulse { 0%,100% { opacity:.25; filter: blur(30px); } 50% { opacity:.5; filter: blur(45px); } }
+          @media (pointer:fine) { html, body { cursor: none; } }
+          .x-cursor { position: fixed; left: 0; top: 0; width: 40px; height: 40px; transform: translate(-50%, -50%) scale(var(--scale,1)); background: url('/yodalove.gif') center/contain no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35)); pointer-events: none; transition: transform 120ms ease, opacity 120ms ease; z-index: 9999; opacity: var(--opacity, 0); will-change: transform; }
+          .x-cursor:after{ content:""; position:absolute; inset:-6px; border-radius:9999px; background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0)); filter: blur(6px); opacity:.6; }
+          .x-ring { position: fixed; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 9999px; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5); pointer-events: none; z-index: 9998; animation: x-ping .6s ease-out forwards; }
+          @keyframes x-ping { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(5); } }
         `}
       </style>
 
@@ -206,7 +184,10 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
-              <button className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]">
+              <button
+                className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]"
+                onClick={() => setOpenModal(true)}
+              >
                 Open Surprise
               </button>
               <button className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]">
@@ -228,6 +209,104 @@ export default function HeroSection() {
 
         <Footer />
       </div>
+
+      {openModal && (
+        <div className="fixed inset-0 z-10000 flex items-center justify-center bg-black/60 backdrop-blur">
+          <div className="relative w-full max-w-5xl px-4">
+            <div className="rounded-3xl bg-transparent border border-transparent shadow-none p-0 sm:p-0">
+              <div className="flex items-start justify-end mb-4 px-4 sm:px-6 pt-4 sm:pt-6">
+                <button
+                  onClick={() => setOpenModal(false)}
+                  className="rounded-xl border border-white/20 px-3 py-2 text-white/90 hover:bg-white/10 active:scale-95"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div
+                className="relative h-110 sm:h-130 perspective-[1400px]"
+                ref={areaRef}
+                onMouseMove={handleMove}
+                onMouseLeave={resetTilt}
+              >
+                <div className="pointer-events-none absolute inset-0 blur-3xl opacity-30 animate-[glowPulse_3s_ease-in-out_infinite]">
+                  <div className="absolute left-1/3 top-1/3 h-40 w-40 rounded-full bg-sky-400/50" />
+                  <div className="absolute right-1/4 bottom-1/4 h-40 w-40 rounded-full bg-fuchsia-400/50" />
+                </div>
+
+                <div
+                  className="relative h-full w-full overflow-visible transform-gpu transition-transform duration-200"
+                  style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
+                >
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[58%] sm:w-[46%] -translate-x-[160%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer"
+                    onClick={prev}
+                  >
+                    <figure className="relative rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
+                      <div className="px-4 pt-3">
+                        <div className="text-white font-semibold text-sm truncate">{slides[leftIdx]?.title}</div>
+                        <div className="text-white/80 text-xs truncate">{slides[leftIdx]?.text}</div>
+                      </div>
+                      <div className="relative m-3 mt-2 rounded-xl overflow-hidden border border-white/20">
+                        <img src={slides[leftIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-[12px] sm:blur-[16px] scale-[1.05]" />
+                        <div className="absolute inset-0 grid place-items-center text-white/85 text-sm tracking-wide bg-black/50">Locked</div>
+                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                          {leftIdx + 1}/{len}
+                        </div>
+                      </div>
+                    </figure>
+                  </div>
+
+                  <div className="absolute left-1/2 top-1/2 w-[66%] sm:w-[54%] -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out">
+                    <figure className="relative rounded-4xl overflow-hidden border border-white/20 shadow-[0_30px_80px_rgba(0,0,0,0.4)] bg-white/5 backdrop-blur animate-[cardPop_.6s_ease]">
+                      <div className="px-5 pt-4 sm:px-6 sm:pt-5">
+                        <div className="text-white font-semibold text-base sm:text-lg">{slides[idx]?.title}</div>
+                        <div className="text-white/80 text-sm sm:text-base">{slides[idx]?.text}</div>
+                      </div>
+                      <div className="relative m-4 mt-3 rounded-2xl overflow-hidden border border-white/20">
+                        <img key={idx} src={slides[idx]?.img || ""} alt="" className="w-full h-80 sm:h-100 object-cover" />
+                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                          {idx + 1}/{len}
+                        </div>
+                      </div>
+                      <div className="pointer-events-none absolute -inset-1 rounded-[40px] border border-white/20 opacity-40" />
+                    </figure>
+                  </div>
+
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[58%] sm:w-[46%] translate-x-[60%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer"
+                    onClick={next}
+                  >
+                    <figure className="relative rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
+                      <div className="px-4 pt-3">
+                        <div className="text-white font-semibold text-sm truncate">{slides[rightIdx]?.title}</div>
+                        <div className="text-white/80 text-xs truncate">{slides[rightIdx]?.text}</div>
+                      </div>
+                      <div className="relative m-3 mt-2 rounded-xl overflow-hidden border border-white/20">
+                        <img src={slides[rightIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-[12px] sm:blur-[16px] scale-[1.05]" />
+                        <div className="absolute inset-0 grid place-items-center text-white/85 text-sm tracking-wide bg-black/50">Locked</div>
+                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                          {rightIdx + 1}/{len}
+                        </div>
+                      </div>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center justify-center gap-2 pb-4">
+                {slides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setIdx(i)}
+                    className={`h-1.5 w-7 rounded-full transition-all ${i === idx ? "bg-white scale-100" : "bg-white/40 scale-95"} active:scale-95`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div
         className="x-cursor"
