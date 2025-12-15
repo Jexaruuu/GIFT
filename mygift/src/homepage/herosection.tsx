@@ -113,6 +113,20 @@ export default function HeroSection() {
   };
   const resetTilt = () => setTilt({ x: 0, y: 0 });
 
+  const cards = useMemo(() => {
+    const base = [
+      { img: slides[0]?.img || "", title: "Warm Wishes", tag: "Holiday", text: "Soft lights, calm nights, cozy smiles." },
+      { img: slides[1]?.img || "", title: "Tiny Joys", tag: "Joy", text: "Little wins that make big days." },
+      { img: slides[2]?.img || "", title: "You’ve Got This", tag: "Cheer", text: "I’m rooting for you—always." },
+      { img: slides[3]?.img || "", title: "Bright Tomorrows", tag: "Hope", text: "Good days are on the way." },
+      { img: slides[0]?.img || "", title: "Kind Lights", tag: "Calm", text: "Breathe in, breathe out, feel peace." },
+      { img: slides[1]?.img || "", title: "Secret Gifts", tag: "Magic", text: "Surprises wrapped in everyday moments." }
+    ];
+    return base;
+  }, [slides]);
+
+  const cardsDoubled = useMemo(() => [...cards, ...cards], [cards]);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-blue-800 font-[Poppins]">
       <style>
@@ -123,6 +137,8 @@ export default function HeroSection() {
           @keyframes caretBlink { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
           @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); } }
           @keyframes glowPulse { 0%,100% { opacity:.25; filter: blur(30px); } 50% { opacity:.5; filter: blur(45px); } }
+          @keyframes scrollX { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+          @keyframes scrollXRev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
           @media (pointer:fine) { html, body { cursor: none; } }
           .x-cursor { position: fixed; left: 0; top: 0; width: 40px; height: 40px; transform: translate(-50%, -50%) scale(var(--scale,1)); background: url('/yodalove.gif') center/contain no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35)); pointer-events: none; transition: transform 120ms ease, opacity 120ms ease; z-index: 9999; opacity: var(--opacity, 0); will-change: transform; }
           .x-cursor:after{ content:""; position:absolute; inset:-6px; border-radius:9999px; background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0)); filter: blur(6px); opacity:.6; }
@@ -204,6 +220,67 @@ export default function HeroSection() {
               className="relative w-full h-auto max-h-120 object-contain drop-shadow-sm select-none transform-gpu will-change-transform motion-safe:animate-[giftSoftShake_3s_ease-in-out_infinite]"
               style={{ animation: "giftSoftShake 3s ease-in-out infinite", transformOrigin: "50% 85%" }}
             />
+          </div>
+        </div>
+
+        <div className="mt-10 sm:mt-14">
+          <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-4 py-6 sm:px-6 sm:py-8">
+            <div className="flex items-center justify-between">
+              <div className="text-white/90 font-semibold text-lg sm:text-xl">Season Picks</div>
+              <div className="text-white/60 text-sm">Hover to pause</div>
+            </div>
+
+            <div className="mt-5 sm:mt-6 space-y-6">
+              <div className="group relative overflow-hidden">
+                <div
+                  className="flex w-[200%] gap-4 sm:gap-5 animate-[scrollX_28s_linear_infinite] group-hover:[animation-play-state:paused]"
+                >
+                  {cardsDoubled.map((c, i) => (
+                    <article
+                      key={`r1-${i}-${c.title}-${i}`}
+                      className="relative w-[260px] sm:w-[320px] flex-shrink-0"
+                    >
+                      <div className="relative h-44 sm:h-56 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
+                        <img src={c.img} alt="" className="h-full w-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-blue-950/70 via-blue-900/20 to-transparent" />
+                        <div className="absolute top-3 left-3 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                          {c.tag}
+                        </div>
+                      </div>
+                      <div className="px-1.5 pt-2">
+                        <h3 className="text-white font-semibold truncate">{c.title}</h3>
+                        <p className="text-white/70 text-sm line-clamp-2">{c.text}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="group relative overflow-hidden">
+                <div
+                  className="flex w-[200%] gap-4 sm:gap-5 animate-[scrollXRev_32s_linear_infinite] group-hover:[animation-play-state:paused]"
+                >
+                  {cardsDoubled.map((c, i) => (
+                    <article
+                      key={`r2-${i}-${c.title}-${i}`}
+                      className="relative w-[260px] sm:w-[320px] flex-shrink-0"
+                    >
+                      <div className="relative h-44 sm:h-56 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
+                        <img src={c.img} alt="" className="h-full w-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-blue-950/70 via-blue-900/20 to-transparent" />
+                        <div className="absolute top-3 left-3 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                          {c.tag}
+                        </div>
+                      </div>
+                      <div className="px-1.5 pt-2">
+                        <h3 className="text-white font-semibold truncate">{c.title}</h3>
+                        <p className="text-white/70 text-sm line-clamp-2">{c.text}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
