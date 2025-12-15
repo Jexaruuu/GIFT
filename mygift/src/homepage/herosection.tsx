@@ -112,11 +112,11 @@ export default function HeroSection() {
 
   const cards = useMemo(() => {
     return [
-      { img: "/adoy1.png", title: "Warm Wishes", tag: "Holiday", text: "Soft lights, calm nights, cozy smiles." },
-      { img: "/adoy2.png", title: "Tiny Joys", tag: "Joy", text: "Little wins that make big days." },
-      { img: "/adoy3.png", title: "You’ve Got This", tag: "Cheer", text: "I’m rooting for you—always." },
-      { img: "/adoy4.png", title: "Bright Tomorrows", tag: "Hope", text: "Good days are on the way." },
-      { img: "/adoy5.png", title: "Kind Lights", tag: "Calm", text: "Breathe in, breathe out, feel peace." },
+      { img: "/adoy1.png", title: "Warm Wishes", tag: "Smile", text: "Soft lights, calm nights, best smiles." },
+      { img: "/adoy2.png", title: "Tiny Joys", tag: "Always", text: "Little wins that make big days." },
+      { img: "/adoy3.png", title: "You’ve Got This", tag: "And", text: "I’m rooting for you—always." },
+      { img: "/adoy4.png", title: "Bright Tomorrows", tag: "Be", text: "Good days are on the way." },
+      { img: "/adoy5.png", title: "Kind Lights", tag: "Happy", text: "Breathe in, breathe out, feel peace." },
     ];
   }, []);
 
@@ -328,7 +328,7 @@ export default function HeroSection() {
         <div className="mt-10 sm:mt-14">
           <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-3 sm:px-6 py-5 sm:py-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <div className="text-white/90 font-semibold text-lg sm:text-xl">Mini Yoda</div>
+              <div className="text-white/90 font-semibold text-lg sm:text-xl">Mini Adoy</div>
               <div className="text-white/60 text-xs sm:text-sm">Hover to pause • Drag to browse</div>
             </div>
 
@@ -453,17 +453,23 @@ export default function HeroSection() {
               <img src="/scroll.png" alt="" className="w-full h-auto max-h-[80vh] sm:max-h-[85vh] object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-[70%] sm:w-[58%] max-h-[42vh] sm:max-h-[50vh] overflow-y-auto x-scroll-pretty px-5 sm:px-8 pt-[clamp(44px,11vh,120px)] pb-[clamp(44px,11vh,120px)] text-white text-justify text-[clamp(13px,3.6vw,16px)] leading-7">
-                  <h2 className="text-center text-[clamp(18px,6vw,30px)] sm:text-3xl font-extrabold tracking-wide">A Christmas Letter</h2>
+                  <h2 className="text-center text-[clamp(18px,6vw,30px)] sm:text-1xl font-bold tracking-wide">A Letter For My Favorite Person</h2>
                   <p className="mt-3 sm:mt-4">
-                    This season, I wish you quiet mornings, warm coffee, and gentle light through your window. I hope your days feel soft and safe, and that even on the busy ones you still find small pockets of calm where you can breathe and smile. You deserve a December that is kind to your heart and generous to your dreams.
+                    Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy lagi. Sana okay lang ikaw palagi Adooooy.
                   </p>
                   <p className="mt-3 sm:mt-4">
-                    Thank you for the little moments that turned ordinary hours into good memories—the quick chats, the jokes, the check-ins, the tiny wins we celebrated. Those were the sparks that kept things bright. You have a way of making hard things feel possible and long paths feel shorter. I’m proud of how far you’ve come, even if you don’t always see it yet.
+                   Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise na ganto kapag para sayo. Hindi ko na din nga alam kung matututwa ka pa sa gantong trip ko eh hehe, pero gusto ko lang sabihin na lahat ng gantong ginagawa ko ay galing sa aking heart. Gusto ko lang talaga na mapasaya ka kahit papano, kahit na hindi naman talaa tayo nag kikita tska hindi din ganun masyado nang nag uusap.
                   </p>
                   <p className="mt-3 sm:mt-4">
-                    If days get heavy, remember you’re not alone. Rest when you need to, and keep going when you’re ready. I’ll be here, cheering for you in every step, trusting your timing, and believing in your pace. May the new year meet you with courage, clarity, and plenty of reasons to laugh. For now, let this be a warm hug in words: you are valued, you are seen, and you are loved.
+                    Pero not gonna lie, alam mo ba na iniisip parin kita? hindi lang madalas, kundi palagi. Pasensya na kung minsan napapansin mo na sobrang downbad ako ha, pero sinusunod ko yung sinasabi mo na piliin ko maging masaya, Gustong gusto kong mag rant sayo about sa mga nangyayare na sa life ko, pero nahihiya na ko kasi dadagdag pa ba ako sa mga iniisip mo? kung alam mo lang kung gaano kita gusto kausap at kausapin. Alam ko nasabi ko na sayo to pero ewan, yun talaga nararamdaman ko.
                   </p>
-                  <p className="mt-5 sm:mt-6 text-right font-semibold">Merry Christmas ✨</p>
+                  <p className="mt-3 sm:mt-4">
+                    Kaya kahit mabasa mo lang to, okay na ko. Kahit walang response or anything, okay na ako. Naalala mo yung mga sinabi ko nung unang message ko? Ganun parin yun walang nag bago. si YODA parin talaga eh. So ayun lang gusto ko lang sabihin sayo Adooy, na kahit anong mangyari, andito parin ako. Lagi parin kitang susuportahan sa mga goals mo, sa mga pangarap mo, sa mga gusto mong gawin. Lagi parin kitang mamahalin kahit anong mangyari.
+                    </p>
+                    <p className="mt-3 sm:mt-4">
+                    Bawi ako soon, Roblox ulet tayo. Iiwasan ko na ma end yung streak, ayoko mag promise kasi naka ilang ulet na, pero susubukan ko parin po. Ingat ka palagi Adooy, at tandaan mo...
+                    </p>
+                  <p className="mt-5 sm:mt-6 text-right font-semibold">Mahalaga ka palagi, Merry Christmas! ✨</p>
                 </div>
               </div>
             </div>
