@@ -328,7 +328,7 @@ export default function HeroSection() {
         <div className="mt-10 sm:mt-14">
           <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-3 sm:px-6 py-5 sm:py-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <div className="text-white/90 font-semibold text-lg sm:text-xl">Season Picks</div>
+              <div className="text-white/90 font-semibold text-lg sm:text-xl">Mini Yoda</div>
               <div className="text-white/60 text-xs sm:text-sm">Hover to pause • Drag to browse</div>
             </div>
 
