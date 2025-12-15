@@ -111,18 +111,14 @@ export default function HeroSection() {
   const resetTilt = () => setTilt({ x: 0, y: 0 });
 
   const cards = useMemo(() => {
-    const base = [
-      { img: slides[0]?.img || "", title: "Warm Wishes", tag: "Holiday", text: "Soft lights, calm nights, cozy smiles." },
-      { img: slides[1]?.img || "", title: "Tiny Joys", tag: "Joy", text: "Little wins that make big days." },
-      { img: slides[2]?.img || "", title: "You’ve Got This", tag: "Cheer", text: "I’m rooting for you—always." },
-      { img: slides[3]?.img || "", title: "Bright Tomorrows", tag: "Hope", text: "Good days are on the way." },
-      { img: slides[0]?.img || "", title: "Kind Lights", tag: "Calm", text: "Breathe in, breathe out, feel peace." },
-      { img: slides[1]?.img || "", title: "Secret Gifts", tag: "Magic", text: "Surprises wrapped in everyday moments." },
+    return [
+      { img: "/adoy1.png", title: "Warm Wishes", tag: "Holiday", text: "Soft lights, calm nights, cozy smiles." },
+      { img: "/adoy2.png", title: "Tiny Joys", tag: "Joy", text: "Little wins that make big days." },
+      { img: "/adoy3.png", title: "You’ve Got This", tag: "Cheer", text: "I’m rooting for you—always." },
+      { img: "/adoy4.png", title: "Bright Tomorrows", tag: "Hope", text: "Good days are on the way." },
+      { img: "/adoy5.png", title: "Kind Lights", tag: "Calm", text: "Breathe in, breathe out, feel peace." },
     ];
-    return base;
-  }, [slides]);
-
-  const cardsDoubled = useMemo(() => [...cards, ...cards], [cards]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = openModal || openScroll ? "hidden" : "";
@@ -130,6 +126,83 @@ export default function HeroSection() {
       document.body.style.overflow = "";
     };
   }, [openModal, openScroll]);
+
+  const dragWrapRef = useRef<HTMLDivElement | null>(null);
+  const dragTrackRef = useRef<HTMLDivElement | null>(null);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const startXRef = useRef(0);
+  const baseXRef = useRef(0);
+  const lastXRef = useRef(0);
+  const velRef = useRef(-0.12);
+  const rafRef = useRef(0);
+  const hoverRef = useRef(false);
+  const wrapWRef = useRef(0);
+  const trackWRef = useRef(0);
+  const minXRef = useRef(0);
+
+  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+
+  useEffect(() => {
+    const measure = () => {
+      const wrap = dragWrapRef.current;
+      const track = dragTrackRef.current;
+      wrapWRef.current = wrap ? wrap.clientWidth : 0;
+      trackWRef.current = track ? track.scrollWidth : 0;
+      minXRef.current = Math.min(0, wrapWRef.current - trackWRef.current);
+      setDragX((x) => clamp(x, minXRef.current, 0));
+    };
+    measure();
+    const ro1 = new ResizeObserver(measure);
+    const ro2 = new ResizeObserver(measure);
+    if (dragWrapRef.current) ro1.observe(dragWrapRef.current);
+    if (dragTrackRef.current) ro2.observe(dragTrackRef.current);
+    return () => {
+      ro1.disconnect();
+      ro2.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const step = () => {
+      if (!isDragging && !hoverRef.current) {
+        setDragX((x) => {
+          let nx = x + velRef.current;
+          if (nx < minXRef.current) {
+            nx = minXRef.current;
+            velRef.current = Math.abs(velRef.current);
+          }
+          if (nx > 0) {
+            nx = 0;
+            velRef.current = -Math.abs(velRef.current);
+          }
+          return nx;
+        });
+      }
+      rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isDragging]);
+
+  const onDown = (clientX: number) => {
+    setIsDragging(true);
+    startXRef.current = clientX;
+    baseXRef.current = dragX;
+    lastXRef.current = clientX;
+  };
+  const onMove = (clientX: number) => {
+    if (!isDragging) return;
+    const dx = clientX - startXRef.current;
+    const nx = clamp(baseXRef.current + dx, minXRef.current, 0);
+    setDragX(nx);
+    velRef.current = clientX - lastXRef.current;
+    lastXRef.current = clientX;
+  };
+  const onUp = () => {
+    setIsDragging(false);
+    velRef.current = Math.max(Math.min(velRef.current, 20), -20) * 0.2;
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-blue-800 font-[Poppins]">
@@ -141,10 +214,7 @@ export default function HeroSection() {
           @keyframes caretBlink { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
           @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); }
           @keyframes glowPulse { 0%,100% { opacity:.25; filter: blur(30px); } 50% { opacity:.5; filter: blur(45px); } }
-          @keyframes scrollX { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-          @keyframes scrollXRev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
           @keyframes scrollUnroll { 0% { transform: scaleY(.9); opacity: 0; } 100% { transform: scaleY(1); opacity: 1); } }
-
           .x-scroll{
             overscroll-behavior: contain;
             -ms-overflow-style: none !important;
@@ -157,7 +227,6 @@ export default function HeroSection() {
           .x-scroll::-webkit-scrollbar-track,
           .x-scroll::-webkit-scrollbar-button,
           .x-scroll::-webkit-scrollbar-corner{ display:none !important; background:transparent !important; border:none !important; }
-
           .x-scroll-pretty{
             overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
@@ -174,17 +243,15 @@ export default function HeroSection() {
           }
           .x-scroll-pretty:hover::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.6); }
           .x-scroll-pretty::-webkit-scrollbar-thumb:active{ background: rgba(255,255,255,.8); }
-
           @media (max-width: 360px){
             .x-tight-pad{ padding-left: 0.75rem; padding-right: 0.75rem; }
           }
-
-          @media (pointer:fine) { html, body { cursor: none; } }
+          @media (pointer:fine) { html, body { cursor: none; }
+          }
           .x-cursor { position: fixed; left: 0; top: 0; width: 40px; height: 40px; transform: translate(-50%, -50%) scale(var(--scale,1)); background: url('/yodalove.gif') center/contain no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35)); pointer-events: none; transition: transform 120ms ease, opacity 120ms ease; z-index: 9999; opacity: var(--opacity, 0); will-change: transform; }
           .x-cursor:after{ content:""; position:absolute; inset:-6px; border-radius:9999px; background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0)); filter: blur(6px); opacity:.6; }
           .x-ring { position: fixed; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 9999px; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5); pointer-events: none; z-index: 9998; animation: x-ping .6s ease-out forwards; }
           @keyframes x-ping { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(5); } }
-
           @keyframes tiltFloat {
             0% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
             50% { transform: perspective(800px) rotate(4deg) translateY(-4px) scale(1.02); }
@@ -262,46 +329,31 @@ export default function HeroSection() {
           <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-3 sm:px-6 py-5 sm:py-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div className="text-white/90 font-semibold text-lg sm:text-xl">Season Picks</div>
-              <div className="text-white/60 text-xs sm:text-sm">Hover to pause</div>
+              <div className="text-white/60 text-xs sm:text-sm">Hover to pause • Drag to browse</div>
             </div>
 
-            <div className="mt-5 sm:mt-6 space-y-6">
-              <div className="group relative overflow-hidden">
-                <div className="flex w-[220%] md:w-[200%] gap-3 sm:gap-5 animate-[scrollXRev_28s_linear_infinite] group-hover:[animation-play-state:paused]">
-                  {cardsDoubled.map((c, i) => (
-                    <article key={`r1-${i}-${c.title}-${i}`} className="relative w-50 sm:w-65 md:w-[320px] shrink-0">
-                      <div className="relative h-40 sm:h-56 md:h-64 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
-                        <img
-                          src={c.img}
-                          alt=""
-                          className="h-full w-full object-cover transform-gpu will-change-transform group-hover:[animation-play-state:paused]"
-                          style={{ animation: `tiltFloat 6.5s ease-in-out ${((i % 6) * 0.25).toFixed(2)}s infinite` }}
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-blue-950/70 via-blue-900/20 to-transparent" />
-                        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 rounded-full bg-white/15 border border-white/25 text-white text-[10px] sm:text-xs px-2 py-1 backdrop-blur">
-                          {c.tag}
-                        </div>
-                      </div>
-                      <div className="px-1.5 pt-2">
-                        <h3 className="text-white font-semibold truncate">{c.title}</h3>
-                        <p className="text-white/70 text-xs sm:text-sm line-clamp-2">{c.text}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </div>
-
-              <div className="group relative overflow-hidden">
-                <div className="flex w-[220%] md:w-[200%] gap-3 sm:gap-5 animate-[scrollX_32s_linear_infinite] group-hover:[animation-play-state:paused]">
-                  {cardsDoubled.map((c, i) => (
-                    <article key={`r2-${i}-${c.title}-${i}`} className="relative w-50 sm:w-65 md:w-[320px] shrink-0">
-                      <div className="relative h-40 sm:h-56 md:h-64 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
-                        <img
-                          src={c.img}
-                          alt=""
-                          className="h-full w-full object-cover transform-gpu will-change-transform group-hover:[animation-play-state:paused]"
-                          style={{ animation: `tiltFloat 7.2s ease-in-out ${((i % 6) * 0.3).toFixed(2)}s infinite` }}
-                        />
+            <div className="mt-5 sm:mt-6">
+              <div
+                ref={dragWrapRef}
+                className="group relative overflow-hidden select-none cursor-grab active:cursor-grabbing"
+                onMouseEnter={() => { hoverRef.current = true; }}
+                onMouseLeave={() => { hoverRef.current = false; onUp(); }}
+                onMouseDown={(e) => onDown(e.clientX)}
+                onMouseMove={(e) => onMove(e.clientX)}
+                onMouseUp={onUp}
+                onTouchStart={(e) => onDown(e.touches[0].clientX)}
+                onTouchMove={(e) => onMove(e.touches[0].clientX)}
+                onTouchEnd={onUp}
+              >
+                <div
+                  ref={dragTrackRef}
+                  className="flex gap-3 sm:gap-5 will-change-transform"
+                  style={{ transform: `translateX(${dragX}px)` }}
+                >
+                  {cards.map((c, i) => (
+                    <article key={`drag-${i}-${c.title}`} className="relative w-50 sm:w-65 md:w-[320px] shrink-0">
+                      <div className="relative h-40 sm:h-56 md:h-64 overflow-hidden rounded-2xl bg-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                        <img src={c.img} alt="" className="h-full w-full object-contain" />
                         <div className="absolute inset-0 bg-linear-to-t from-blue-950/70 via-blue-900/20 to-transparent" />
                         <div className="absolute top-2 sm:top-3 left-2 sm:left-3 rounded-full bg-white/15 border border-white/25 text-white text-[10px] sm:text-xs px-2 py-1 backdrop-blur">
                           {c.tag}
