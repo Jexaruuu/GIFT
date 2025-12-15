@@ -175,11 +175,21 @@ export default function HeroSection() {
           .x-scroll-pretty:hover::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.6); }
           .x-scroll-pretty::-webkit-scrollbar-thumb:active{ background: rgba(255,255,255,.8); }
 
+          @media (max-width: 360px){
+            .x-tight-pad{ padding-left: 0.75rem; padding-right: 0.75rem; }
+          }
+
           @media (pointer:fine) { html, body { cursor: none; } }
           .x-cursor { position: fixed; left: 0; top: 0; width: 40px; height: 40px; transform: translate(-50%, -50%) scale(var(--scale,1)); background: url('/yodalove.gif') center/contain no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35)); pointer-events: none; transition: transform 120ms ease, opacity 120ms ease; z-index: 9999; opacity: var(--opacity, 0); will-change: transform; }
           .x-cursor:after{ content:""; position:absolute; inset:-6px; border-radius:9999px; background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0)); filter: blur(6px); opacity:.6; }
           .x-ring { position: fixed; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 9999px; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5); pointer-events: none; z-index: 9998; animation: x-ping .6s ease-out forwards; }
           @keyframes x-ping { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(5); } }
+
+          @keyframes tiltFloat {
+            0% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
+            50% { transform: perspective(800px) rotate(4deg) translateY(-4px) scale(1.02); }
+            100% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
+          }
         `}
       </style>
 
@@ -208,17 +218,17 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <div className="relative mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 py-8 sm:py-14 x-tight-pad">
         <Navigation />
 
-        <div className="mt-10 sm:mt-14 grid gap-8 sm:gap-10 lg:grid-cols-2 lg:items-center">
+        <div className="mt-8 sm:mt-14 grid gap-8 sm:gap-10 lg:grid-cols-2 lg:items-center">
           <div className="min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 sm:px-4 py-2 text-xs sm:text-sm text-white/90 shadow-sm">
               <span className="h-2 w-2 rounded-full bg-white" />
               Hello, How are you?
             </div>
 
-            <h1 className="mt-5 sm:mt-6 text-3xl sm:4xl lg:text-5xl font-extrabold tracking-tight text-white">
+            <h1 className="mt-4 sm:mt-6 text-[clamp(24px,6vw,48px)] lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
               Merry Christmas,{" "}
               <span className="inline-flex items-baseline">
                 <span className="whitespace-nowrap">{typed}</span>
@@ -227,7 +237,7 @@ export default function HeroSection() {
               ✨
             </h1>
 
-            <p className="mt-3 sm:mt-4 text-base sm:text-lg text-white/80">
+            <p className="mt-3 sm:mt-4 text-[clamp(14px,3.6vw,18px)] text-white/80">
               May your heart feel calm, your dreams grow, and your days sparkle with hope.
               I’m grateful for you always cheering for you adooooy!
             </p>
@@ -243,33 +253,38 @@ export default function HeroSection() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-5 sm:-inset-6 rounded-4xl bg-linear-to-r from-white/10 via-emerald-400/15 to-white/10 blur-2xl" />
-            <img src="/bluegift.png" alt="Christmas" className="relative w-full h-auto max-h-120 object-contain drop-shadow-sm select-none transform-gpu will-change-transform motion-safe:animate-[giftSoftShake_3s_ease-in-out_infinite]" style={{ animation: "giftSoftShake 3s ease-in-out infinite", transformOrigin: "50% 85%" }} />
+            <div className="absolute -inset-3 sm:-inset-6 rounded-4xl bg-linear-to-r from-white/10 via-emerald-400/15 to-white/10 blur-2xl" />
+            <img src="/bluegift.png" alt="Christmas" className="relative w-full h-auto max-h-[36vh] sm:max-h-120 object-contain drop-shadow-sm select-none transform-gpu will-change-transform motion-safe:animate-[giftSoftShake_3s_ease-in-out_infinite]" style={{ animation: "giftSoftShake 3s ease-in-out infinite", transformOrigin: "50% 85%" }} />
           </div>
         </div>
 
         <div className="mt-10 sm:mt-14">
-          <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-4 py-6 sm:px-6 sm:py-8">
-            <div className="flex items-center justify-between">
+          <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur px-3 sm:px-6 py-5 sm:py-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div className="text-white/90 font-semibold text-lg sm:text-xl">Season Picks</div>
-              <div className="text-white/60 text-sm">Hover to pause</div>
+              <div className="text-white/60 text-xs sm:text-sm">Hover to pause</div>
             </div>
 
             <div className="mt-5 sm:mt-6 space-y-6">
               <div className="group relative overflow-hidden">
-                <div className="flex w-[200%] gap-4 sm:gap-5 animate-[scrollX_28s_linear_infinite] group-hover:[animation-play-state:paused]">
+                <div className="flex w-[220%] md:w-[200%] gap-3 sm:gap-5 animate-[scrollXRev_28s_linear_infinite] group-hover:[animation-play-state:paused]">
                   {cardsDoubled.map((c, i) => (
-                    <article key={`r1-${i}-${c.title}-${i}`} className="relative w-65 sm:w-[320px] shrink-0">
-                      <div className="relative h-44 sm:h-56 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
-                        <img src={c.img} alt="" className="h-full w-full object-cover" />
+                    <article key={`r1-${i}-${c.title}-${i}`} className="relative w-50 sm:w-65 md:w-[320px] shrink-0">
+                      <div className="relative h-40 sm:h-56 md:h-64 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
+                        <img
+                          src={c.img}
+                          alt=""
+                          className="h-full w-full object-cover transform-gpu will-change-transform group-hover:[animation-play-state:paused]"
+                          style={{ animation: `tiltFloat 6.5s ease-in-out ${((i % 6) * 0.25).toFixed(2)}s infinite` }}
+                        />
                         <div className="absolute inset-0 bg-linear-to-t from-blue-950/70 via-blue-900/20 to-transparent" />
-                        <div className="absolute top-3 left-3 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 rounded-full bg-white/15 border border-white/25 text-white text-[10px] sm:text-xs px-2 py-1 backdrop-blur">
                           {c.tag}
                         </div>
                       </div>
                       <div className="px-1.5 pt-2">
                         <h3 className="text-white font-semibold truncate">{c.title}</h3>
-                        <p className="text-white/70 text-sm line-clamp-2">{c.text}</p>
+                        <p className="text-white/70 text-xs sm:text-sm line-clamp-2">{c.text}</p>
                       </div>
                     </article>
                   ))}
@@ -277,19 +292,24 @@ export default function HeroSection() {
               </div>
 
               <div className="group relative overflow-hidden">
-                <div className="flex w-[200%] gap-4 sm:gap-5 animate-[scrollXRev_32s_linear_infinite] group-hover:[animation-play-state:paused]">
+                <div className="flex w-[220%] md:w-[200%] gap-3 sm:gap-5 animate-[scrollX_32s_linear_infinite] group-hover:[animation-play-state:paused]">
                   {cardsDoubled.map((c, i) => (
-                    <article key={`r2-${i}-${c.title}-${i}`} className="relative w-65 sm:w-[320px] shrink-0">
-                      <div className="relative h-44 sm:h-56 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
-                        <img src={c.img} alt="" className="h-full w-full object-cover" />
+                    <article key={`r2-${i}-${c.title}-${i}`} className="relative w-50 sm:w-65 md:w-[320px] shrink-0">
+                      <div className="relative h-40 sm:h-56 md:h-64 overflow-hidden rounded-2xl border border-white/15 bg-white/10">
+                        <img
+                          src={c.img}
+                          alt=""
+                          className="h-full w-full object-cover transform-gpu will-change-transform group-hover:[animation-play-state:paused]"
+                          style={{ animation: `tiltFloat 7.2s ease-in-out ${((i % 6) * 0.3).toFixed(2)}s infinite` }}
+                        />
                         <div className="absolute inset-0 bg-linear-to-t from-blue-950/70 via-blue-900/20 to-transparent" />
-                        <div className="absolute top-3 left-3 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">
+                        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 rounded-full bg-white/15 border border-white/25 text-white text-[10px] sm:text-xs px-2 py-1 backdrop-blur">
                           {c.tag}
                         </div>
                       </div>
                       <div className="px-1.5 pt-2">
                         <h3 className="text-white font-semibold truncate">{c.title}</h3>
-                        <p className="text-white/70 text-sm line-clamp-2">{c.text}</p>
+                        <p className="text-white/70 text-xs sm:text-sm line-clamp-2">{c.text}</p>
                       </div>
                     </article>
                   ))}
@@ -304,66 +324,66 @@ export default function HeroSection() {
 
       {openModal && (
         <div className="fixed inset-0 z-10000 flex items-center justify-center bg-black/60 backdrop-blur">
-          <div className="relative w-full max-w-5xl px-4">
-            <div className="rounded-3xl bg-transparent border border-transparent shadow-none p-0 sm:p-0">
-              <div className="flex items-start justify-end mb-4 px-4 sm:px-6 pt-4 sm:pt-6">
+          <div className="relative w-full max-w-5xl px-3 sm:px-4">
+            <div className="rounded-3xl bg-transparent border border-transparent shadow-none p-0">
+              <div className="flex items-start justify-end mb-2 sm:mb-4 px-3 sm:px-6 pt-3 sm:pt-6">
                 <button onClick={() => setOpenModal(false)} className="rounded-xl border border-white/20 px-3 py-2 text-white/90 hover:bg-white/10 active:scale-95">✕</button>
               </div>
 
-              <div className="relative h-110 sm:h-130 perspective-[1400px]" ref={areaRef} onMouseMove={handleMove} onMouseLeave={resetTilt}>
+              <div className="relative h-[60vh] sm:h-110 md:h-130 perspective-[1400px]" ref={areaRef} onMouseMove={handleMove} onMouseLeave={resetTilt}>
                 <div className="pointer-events-none absolute inset-0 blur-3xl opacity-30 animate-[glowPulse_3s_ease-in-out_infinite]">
-                  <div className="absolute left-1/3 top-1/3 h-40 w-40 rounded-full bg-sky-400/50" />
-                  <div className="absolute right-1/4 bottom-1/4 h-40 w-40 rounded-full bg-fuchsia-400/50" />
+                  <div className="absolute left-1/3 top-1/3 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-sky-400/50" />
+                  <div className="absolute right-1/4 bottom-1/4 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-fuchsia-400/50" />
                 </div>
 
                 <div className="relative h-full w-full overflow-visible transform-gpu transition-transform duration-200" style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}>
-                  <div className="absolute left-1/2 top-1/2 w-[58%] sm:w-[46%] -translate-x-[160%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer" onClick={prev}>
-                    <figure className="relative rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
+                  <div className="absolute left-1/2 top-1/2 w-[72%] sm:w-[46%] -translate-x-[160%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer" onClick={prev}>
+                    <figure className="relative rounded-[22px] sm:rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
                       <div className="px-4 pt-3">
-                        <div className="text-white font-semibold text-sm truncate">{slides[leftIdx]?.title}</div>
-                        <div className="text-white/80 text-xs truncate">{slides[leftIdx]?.text}</div>
+                        <div className="text-white font-semibold text-xs sm:text-sm truncate">{slides[leftIdx]?.title}</div>
+                        <div className="text-white/80 text-[11px] sm:text-xs truncate">{slides[leftIdx]?.text}</div>
                       </div>
                       <div className="relative m-3 mt-2 rounded-xl overflow-hidden border border-white/20">
-                        <img src={slides[leftIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-md sm:blur-lg scale-[1.05]" />
-                        <div className="absolute inset-0 grid place-items-center text-white/85 text-sm tracking-wide bg-black/50">Locked</div>
-                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">{leftIdx + 1}/{len}</div>
+                        <img src={slides[leftIdx]?.img || ""} alt="" className="w-full h-56 sm:h-92.5 object-cover blur-md sm:blur-lg scale-[1.05]" />
+                        <div className="absolute inset-0 grid place-items-center text-white/85 text-xs tracking-wide bg-black/50">Locked</div>
+                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-[11px] sm:text-xs px-2 py-1 backdrop-blur">{leftIdx + 1}/{len}</div>
                       </div>
                     </figure>
                   </div>
 
-                  <div className="absolute left-1/2 top-1/2 w-[66%] sm:w-[54%] -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out">
-                    <figure className="relative rounded-4xl overflow-hidden border border-white/20 shadow-[0_30px_80px_rgba(0,0,0,0.4)] bg-white/5 backdrop-blur animate-[cardPop_.6s_ease]">
-                      <div className="px-5 pt-4 sm:px-6 sm:pt-5">
+                  <div className="absolute left-1/2 top-1/2 w-[84%] sm:w-[54%] -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out">
+                    <figure className="relative rounded-3xl sm:rounded-4xl overflow-hidden border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.35)] sm:shadow-[0_30px_80px_rgba(0,0,0,0.4)] bg-white/5 backdrop-blur animate-[cardPop_.6s_ease]">
+                      <div className="px-4 sm:px-6 pt-4 sm:pt-5">
                         <div className="text-white font-semibold text-base sm:text-lg">{slides[idx]?.title}</div>
                         <div className="text-white/80 text-sm sm:text-base">{slides[idx]?.text}</div>
                       </div>
-                      <div className="relative m-4 mt-3 rounded-2xl overflow-hidden border border-white/20">
-                        <img key={idx} src={slides[idx]?.img || ""} alt="" className="w-full h-80 sm:h-100 object-cover" />
+                      <div className="relative m-3 sm:m-4 mt-3 rounded-2xl overflow-hidden border border-white/20">
+                        <img key={idx} src={slides[idx]?.img || ""} alt="" className="w-full h-64 sm:h-100 object-cover" />
                         <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">{idx + 1}/{len}</div>
                       </div>
-                      <div className="pointer-events-none absolute -inset-1 rounded-[40px] border border-white/20 opacity-40" />
+                      <div className="pointer-events-none absolute -inset-1 rounded-[26px] sm:rounded-[40px] border border-white/20 opacity-40" />
                     </figure>
                   </div>
 
-                  <div className="absolute left-1/2 top-1/2 w-[58%] sm:w-[46%] translate-x-[60%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer" onClick={next}>
-                    <figure className="relative rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
+                  <div className="absolute left-1/2 top-1/2 w-[72%] sm:w-[46%] translate-x-[60%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer" onClick={next}>
+                    <figure className="relative rounded-[22px] sm:rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
                       <div className="px-4 pt-3">
-                        <div className="text-white font-semibold text-sm truncate">{slides[rightIdx]?.title}</div>
-                        <div className="text-white/80 text-xs truncate">{slides[rightIdx]?.text}</div>
+                        <div className="text-white font-semibold text-xs sm:text-sm truncate">{slides[rightIdx]?.title}</div>
+                        <div className="text-white/80 text-[11px] sm:text-xs truncate">{slides[rightIdx]?.text}</div>
                       </div>
                       <div className="relative m-3 mt-2 rounded-xl overflow-hidden border border-white/20">
-                        <img src={slides[rightIdx]?.img || ""} alt="" className="w-full h-75 sm:h-92.5 object-cover blur-md sm:blur-lg scale-[1.05]" />
-                        <div className="absolute inset-0 grid place-items-center text-white/85 text-sm tracking-wide bg-black/50">Locked</div>
-                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-xs px-2 py-1 backdrop-blur">{rightIdx + 1}/{len}</div>
+                        <img src={slides[rightIdx]?.img || ""} alt="" className="w-full h-56 sm:h-92.5 object-cover blur-md sm:blur-lg scale-[1.05]" />
+                        <div className="absolute inset-0 grid place-items-center text-white/85 text-xs tracking-wide bg-black/50">Locked</div>
+                        <div className="absolute top-2 right-2 rounded-full bg-white/15 border border-white/25 text-white text-[11px] sm:text-xs px-2 py-1 backdrop-blur">{rightIdx + 1}/{len}</div>
                       </div>
                     </figure>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 flex items-center justify-center gap-2 pb-4">
+              <div className="mt-4 sm:mt-5 flex items-center justify-center gap-1.5 sm:gap-2 pb-3 sm:pb-4">
                 {slides.map((_, i) => (
-                  <button key={i} onClick={() => setIdx(i)} className={`h-1.5 w-7 rounded-full transition-all ${i === idx ? "bg-white scale-100" : "bg-white/40 scale-95"} active:scale-95`} />
+                  <button key={i} onClick={() => setIdx(i)} className={`h-1.5 w-6 sm:w-7 rounded-full transition-all ${i === idx ? "bg-white scale-100" : "bg-white/40 scale-95"} active:scale-95`} />
                 ))}
               </div>
             </div>
@@ -373,25 +393,25 @@ export default function HeroSection() {
 
       {openScroll && (
         <div className="fixed inset-0 z-10001 flex items-center justify-center bg-black/60 backdrop-blur">
-          <div className="relative w-full max-w-3xl px-4">
-            <div className="flex items-start justify-end mb-3 px-1 pt-2">
+          <div className="relative w-full max-w-3xl px-3 sm:px-4">
+            <div className="flex items-start justify-end mb-2 sm:mb-3 px-1 pt-2">
               <button onClick={() => setOpenScroll(false)} className="rounded-xl border border-white/20 px-3 py-2 text-white/90 hover:bg-white/10 active:scale-95">✕</button>
             </div>
             <div className="relative mx-auto w-full animate-[scrollUnroll_.28s_ease-out]">
-              <img src="/scroll.png" alt="" className="w-full h-auto max-h-[85vh] object-contain" />
+              <img src="/scroll.png" alt="" className="w-full h-auto max-h-[80vh] sm:max-h-[85vh] object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[64%] sm:w-[58%] max-h-[50vh] overflow-y-auto x-scroll-pretty px-7 sm:px-8 pt-[clamp(50px,12vh,120px)] pb-[clamp(50px,12vh,120px)] text-white text-justify">
-                  <h2 className="text-center text-2xl sm:text-3xl font-extrabold tracking-wide">A Christmas Letter</h2>
-                  <p className="mt-4 leading-7 text-base">
+                <div className="w-[70%] sm:w-[58%] max-h-[42vh] sm:max-h-[50vh] overflow-y-auto x-scroll-pretty px-5 sm:px-8 pt-[clamp(44px,11vh,120px)] pb-[clamp(44px,11vh,120px)] text-white text-justify text-[clamp(13px,3.6vw,16px)] leading-7">
+                  <h2 className="text-center text-[clamp(18px,6vw,30px)] sm:text-3xl font-extrabold tracking-wide">A Christmas Letter</h2>
+                  <p className="mt-3 sm:mt-4">
                     This season, I wish you quiet mornings, warm coffee, and gentle light through your window. I hope your days feel soft and safe, and that even on the busy ones you still find small pockets of calm where you can breathe and smile. You deserve a December that is kind to your heart and generous to your dreams.
                   </p>
-                  <p className="mt-4 leading-7 text-base">
+                  <p className="mt-3 sm:mt-4">
                     Thank you for the little moments that turned ordinary hours into good memories—the quick chats, the jokes, the check-ins, the tiny wins we celebrated. Those were the sparks that kept things bright. You have a way of making hard things feel possible and long paths feel shorter. I’m proud of how far you’ve come, even if you don’t always see it yet.
                   </p>
-                  <p className="mt-4 leading-7 text-base">
+                  <p className="mt-3 sm:mt-4">
                     If days get heavy, remember you’re not alone. Rest when you need to, and keep going when you’re ready. I’ll be here, cheering for you in every step, trusting your timing, and believing in your pace. May the new year meet you with courage, clarity, and plenty of reasons to laugh. For now, let this be a warm hug in words: you are valued, you are seen, and you are loved.
                   </p>
-                  <p className="mt-6 text-right font-semibold">Merry Christmas ✨</p>
+                  <p className="mt-5 sm:mt-6 text-right font-semibold">Merry Christmas ✨</p>
                 </div>
               </div>
             </div>
