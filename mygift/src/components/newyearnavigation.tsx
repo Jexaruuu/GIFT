@@ -22,7 +22,7 @@ export default function NewYearNavigation() {
     
     { title: "ELIZA MATURAN - Museo", src: "/museo.mp3", img: "/museo.jpg" },
 
-    { title: "EARL AGUSTIN - Tibok", src: "/tibok.mp3", img: "/tibok.jpg" },
+    { title: "EARL AGUSTIN - Tibok", src: "/tibok.mp3", img: "/tibok.png" },
 
     { title: "ARTHUR NERY - Isa Lang", src: "/isa-lang.mp3", img: "/isa-lang.jpg" },
 
