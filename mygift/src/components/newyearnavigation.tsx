@@ -30,7 +30,7 @@ export default function NewYearNavigation() {
 
     { title: "RHODESSA - Kisame", src: "/kisame.mp3", img: "/kisame.jpg" },
 
-    { title: "FITTERKARMA - Pagibig ay Kanibalismo II", src: "/pagibig-ay-kanibalismo.mp3", img: "/pagibig-ay-kanibalismo.jpg" },
+    { title: "FITTERKARMA - Pagibig ay Kanibalismo II", src: "/pagibig-ay-kanibalismo.mp3", img: "/pagibig-ay-kanibalismo.png" },
 
     { title: "KIYO - Ikaw Lang", src: "/ikaw-lang.mp3", img: "/ikaw-lang.jpg" },
 
