@@ -46,7 +46,7 @@ export default function NewYearNavigation() {
 
     { title: "KENANIAH - Bahala Na", src: "/bahala-na.mp3", img: "/bahala-na.jpg" },
 
-    { title: "SUGARCANE - Kung Maging Akin Ka", src: "/kung-maging-akin-ka.mp3", img: "/kung-maging-akin-ka.jpg" },
+    { title: "SUGARCANE - Kung Maging Akin Ka", src: "/kung-maging-akin-ka.mp3", img: "/kung-maging-akin-ka.png" },
 
     { title: "SUD - Sila", src: "/sila.mp3", img: "/sila.jpg" },
 
