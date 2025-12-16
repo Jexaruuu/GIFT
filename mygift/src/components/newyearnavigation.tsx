@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { SkipBack, Play, Pause, SkipForward } from "lucide-react";
 
-export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {}) {
+export default function NewYearNavigation() {
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState("");
   const [countdown, setCountdown] = useState("");
@@ -91,7 +91,9 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
       const m = Math.floor(diff / (1000 * 60));
       diff -= m * 60 * 1000;
       const s = Math.floor(diff / 1000);
-      setCountdown(`${String(d).padStart(2, "0")}d : ${String(h).padStart(2, "0")}h : ${String(m).padStart(2, "0")}m : ${String(s).padStart(2, "0")}s`);
+      setCountdown(
+        `${String(d).padStart(2, "0")}d : ${String(h).padStart(2, "0")}h : ${String(m).padStart(2, "0")}m : ${String(s).padStart(2, "0")}s`
+      );
     };
     tick();
     const id = setInterval(tick, 1000);
@@ -168,29 +170,33 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
 
       <div
         className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-3 py-3 sm:px-4 sm:py-3"
-        style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'" }}
+        style={{
+          fontFamily:
+            "'Poppins', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'",
+        }}
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-2xl text-white grid place-items-center font-bold overflow-hidden">
               <img src={playlist[index]?.img || "/yodaicon.gif"} alt="Cover" className="h-full w-full object-cover" />
             </div>
-
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <div className="font-semibold text-white mt-1">{typed}</div>
-
                 <div className="hidden sm:flex items-center gap-2 mt-1">
                   <button onClick={handlePrev} aria-label="Previous" className="p-2 text-white/90 hover:text-white active:scale-95">
                     <SkipBack size={18} />
                   </button>
-                  <button onClick={handleToggle} aria-label={playing ? "Pause" : "Play"} className="p-2 text-white/90 hover:text-white active:scale-95">
+                  <button
+                    onClick={handleToggle}
+                    aria-label={playing ? "Pause" : "Play"}
+                    className="p-2 text-white/90 hover:text-white active:scale-95"
+                  >
                     {playing ? <Pause size={18} /> : <Play size={18} />}
                   </button>
                   <button onClick={handleNext} aria-label="Next" className="p-2 text-white/90 hover:text-white active:scale-95">
                     <SkipForward size={18} />
                   </button>
-
                   <input
                     type="range"
                     min={0}
@@ -227,10 +233,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
               </div>
             </div>
 
-            <button
-              className="hidden sm:inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]"
-              onClick={() => onNewYear?.()}
-            >
+            <button className="hidden sm:inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]">
               New Year Surprise
             </button>
 
@@ -244,20 +247,24 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
         </div>
 
         <div className={`${open ? "grid" : "hidden"} sm:hidden mt-3 gap-2 text-xs`}>
-          <div className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white font-semibold text-center">{countdown}</div>
-
+          <div className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white font-semibold text-center">
+            {countdown}
+          </div>
           <div className="grid grid-cols-3 gap-2">
             <button onClick={handlePrev} aria-label="Previous" className="p-2 text-white/90 hover:text-white active:scale-95">
               <SkipBack size={18} />
             </button>
-            <button onClick={handleToggle} aria-label={playing ? "Pause" : "Play"} className="p-2 text-white/90 hover:text-white active:scale-95">
+            <button
+              onClick={handleToggle}
+              aria-label={playing ? "Pause" : "Play"}
+              className="p-2 text-white/90 hover:text-white active:scale-95"
+            >
               {playing ? <Pause size={18} /> : <Play size={18} />}
             </button>
             <button onClick={handleNext} aria-label="Next" className="p-2 text-white/90 hover:text-white active:scale-95">
               <SkipForward size={18} />
             </button>
           </div>
-
           <div className="w-full flex items-center gap-2">
             <input
               type="range"
@@ -272,8 +279,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
               {fmt(currentTime)} / {fmt(duration)}
             </div>
           </div>
-
-          <button className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]" onClick={() => onNewYear?.()}>
+          <button className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]">
             New Year Surprise
           </button>
         </div>

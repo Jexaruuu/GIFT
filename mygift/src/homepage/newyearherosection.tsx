@@ -1,21 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import Navigation from "../components/navigation";
-import Footer from "../components/footer";
+import NewYearNavigation from "../components/newyearnavigation";
+import NewYearFooter from "../components/newyearfooter";
 
-export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = {}) {
+export default function NewYearHeroSection() {
   const flakes = useMemo(
     () =>
-      Array.from({ length: 70 }).map((_, i) => ({
+      Array.from({ length: 18 }).map((_, i) => ({
         id: i,
-        left: Math.random() * 100,
-        size: 6 + Math.random() * 10,
-        duration: 7 + Math.random() * 9,
-        delay: Math.random() * 8,
-        opacity: 0.35 + Math.random() * 0.55,
-        drift: -20 + Math.random() * 40,
+        left: 6 + Math.random() * 88,
+        top: 8 + Math.random() * 55,
+        hue: Math.floor(190 + Math.random() * 140),
+        duration: 1.6 + Math.random() * 1.9,
+        delay: Math.random() * 1.6,
+        size: 2.2 + Math.random() * 2.2,
+        radius: 46 + Math.random() * 64,
       })),
     []
   );
+
+  const fwAngles = useMemo(() => Array.from({ length: 14 }).map((_, i) => (i * 360) / 14), []);
 
   const names = useMemo(() => ["Yodaaaaaaaaaa!", "Jergennnnnnnnn!", "Aila Medel"], []);
   const [nameIndex, setNameIndex] = useState(0);
@@ -89,13 +92,14 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
 
   const slides = useMemo(
     () => [
-      { img: "/yoda1.png", title: "To my favorite person", text: "This season, I hope you feel extra loved." },
-      { img: "/yoda2.png", title: "Little moments", text: "The small things we share are the biggest gifts." },
-      { img: "/yoda3.png", title: "Always cheering you on", text: "You’ve got this. I’m here, always." },
-      { img: "/yoda4.png", title: "Bright days ahead", text: "May every day bring you calm and joy." },
+      { img: "/yoda1.png", title: "A fresh start", text: "New year, new peace, new reasons to smile." },
+      { img: "/yoda2.png", title: "Little wins", text: "Every small step counts—always proud of you." },
+      { img: "/yoda3.png", title: "Still cheering", text: "Same support, same energy, all year long." },
+      { img: "/yoda4.png", title: "2026 vibes", text: "May your days feel lighter and brighter." },
     ],
     []
   );
+
   const [openModal, setOpenModal] = useState(false);
   const [openScroll, setOpenScroll] = useState(false);
   const [idx, setIdx] = useState(0);
@@ -119,11 +123,11 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
 
   const cards = useMemo(() => {
     return [
-      { img: "/adoy1.png", title: "Warm Wishes", tag: "Smile", text: "Soft lights, calm nights, best smiles." },
-      { img: "/adoy2.png", title: "Tiny Joys", tag: "Always", text: "Little wins that make big days." },
-      { img: "/adoy3.png", title: "You’ve Got This", tag: "And", text: "I’m rooting for you—always." },
-      { img: "/adoy4.png", title: "Bright Tomorrows", tag: "Be", text: "Good days are on the way." },
-      { img: "/adoy5.png", title: "Kind Lights", tag: "Happy", text: "Breathe in, breathe out, feel peace." },
+      { img: "/adoy1.png", title: "New Year Wish", tag: "Start", text: "A calmer mind and a lighter heart." },
+      { img: "/adoy2.png", title: "Good Energy", tag: "Glow", text: "More smiles, more peace, more you." },
+      { img: "/adoy3.png", title: "Keep Going", tag: "Win", text: "I’m still rooting for you—always." },
+      { img: "/adoy4.png", title: "Bright Days", tag: "Hope", text: "Better days are coming—trust it." },
+      { img: "/adoy5.png", title: "Soft Moments", tag: "Calm", text: "Slow days, warm nights, deep breaths." },
     ];
   }, []);
 
@@ -280,6 +284,170 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
             50% { transform: perspective(800px) rotate(4deg) translateY(-4px) scale(1.02); }
             100% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
           }
+
+          .x-moon-wrap{
+            position:absolute;
+            top: 26px;
+            right: 22px;
+            width: clamp(92px, 14vw, 160px);
+            height: clamp(92px, 14vw, 160px);
+            z-index: 3;
+            pointer-events:none;
+          }
+          .x-moon {
+            position:absolute;
+            inset: 0;
+            border-radius: 9999px;
+            background:
+              radial-gradient(circle at 32% 30%, rgba(225,245,255,.95), rgba(175,215,255,.55) 42%, rgba(110,175,255,.18) 72%, rgba(255,255,255,0) 78%),
+              radial-gradient(circle at 36% 28%, rgba(215,240,255,.95), rgba(160,210,255,.6) 56%, rgba(95,165,255,.16) 82%),
+              radial-gradient(circle at 58% 64%, rgba(35,110,255,.08), rgba(255,255,255,0) 56%);
+            filter: drop-shadow(0 18px 40px rgba(115,170,255,.22));
+            opacity: .96;
+            animation: moonSpin 18s linear infinite;
+            transform-origin: 50% 50%;
+          }
+          @keyframes moonSpin{
+            0%{ transform: rotate(0deg); }
+            100%{ transform: rotate(360deg); }
+          }
+          .x-moon:before{
+            content:"";
+            position:absolute;
+            inset: 10%;
+            border-radius: 9999px;
+            background:
+              radial-gradient(circle at 30% 40%, rgba(0,40,120,.13) 0 10px, rgba(0,0,0,0) 11px),
+              radial-gradient(circle at 68% 58%, rgba(0,40,120,.10) 0 14px, rgba(0,0,0,0) 15px),
+              radial-gradient(circle at 52% 28%, rgba(0,40,120,.09) 0 9px, rgba(0,0,0,0) 10px),
+              radial-gradient(circle at 38% 70%, rgba(0,40,120,.08) 0 12px, rgba(0,0,0,0) 13px);
+            mix-blend-mode: soft-light;
+            opacity: .9;
+          }
+          .x-moon:after{
+            content:"";
+            position:absolute;
+            inset:-14%;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(170,220,255,.18), rgba(255,255,255,0) 62%);
+            filter: blur(2px);
+            opacity: .85;
+          }
+
+          .x-cloud{
+            position:absolute;
+            left: 50%;
+            top: 50%;
+            width: 92%;
+            height: 56%;
+            transform: translate(-50%, -50%);
+            border-radius: 9999px;
+            opacity: .85;
+            filter: blur(0.2px) drop-shadow(0 10px 18px rgba(0,0,0,.18));
+            background:
+              radial-gradient(circle at 18% 60%, rgba(255,255,255,.90) 0 22px, rgba(255,255,255,0) 26px),
+              radial-gradient(circle at 34% 46%, rgba(255,255,255,.88) 0 28px, rgba(255,255,255,0) 34px),
+              radial-gradient(circle at 52% 60%, rgba(255,255,255,.92) 0 24px, rgba(255,255,255,0) 30px),
+              radial-gradient(circle at 70% 48%, rgba(255,255,255,.86) 0 30px, rgba(255,255,255,0) 36px),
+              radial-gradient(circle at 86% 62%, rgba(255,255,255,.90) 0 22px, rgba(255,255,255,0) 28px),
+              linear-gradient(to bottom, rgba(255,255,255,.55), rgba(255,255,255,0));
+            mix-blend-mode: screen;
+          }
+          .x-cloud-1{
+            animation: cloudDrift1 7.5s ease-in-out infinite;
+          }
+          .x-cloud-2{
+            width: 106%;
+            height: 62%;
+            opacity: .65;
+            filter: blur(0.6px) drop-shadow(0 10px 18px rgba(0,0,0,.14));
+            transform: translate(-52%, -54%) scale(1.02);
+            animation: cloudDrift2 9.5s ease-in-out infinite;
+          }
+          @keyframes cloudDrift1{
+            0%{ transform: translate(-56%, -50%) translateX(-10px); opacity:.72; }
+            50%{ transform: translate(-44%, -52%) translateX(12px); opacity:.9; }
+            100%{ transform: translate(-56%, -50%) translateX(-10px); opacity:.72; }
+          }
+          @keyframes cloudDrift2{
+            0%{ transform: translate(-58%, -56%) translateX(12px) scale(1.02); opacity:.52; }
+            50%{ transform: translate(-44%, -54%) translateX(-14px) scale(1.03); opacity:.72; }
+            100%{ transform: translate(-58%, -56%) translateX(12px) scale(1.02); opacity:.52; }
+          }
+
+          .x-fw {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 2;
+          }
+          .x-fw-core{
+            position:absolute;
+            left:50%;
+            top:50%;
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0) 70%);
+            filter: drop-shadow(0 0 18px rgba(255,255,255,.35));
+            animation: x-core var(--dur) ease-out var(--delay) infinite;
+            opacity: 0;
+          }
+          @keyframes x-core{
+            0%{ opacity:0; transform: translate(-50%, 20px) scale(.2); }
+            10%{ opacity:.85; transform: translate(-50%, -12px) scale(.9); }
+            18%{ opacity:0; transform: translate(-50%, -22px) scale(.2); }
+            100%{ opacity:0; transform: translate(-50%, -22px) scale(.2); }
+          }
+          .x-fw-p{
+            position:absolute;
+            left:50%;
+            top:50%;
+            width: var(--sz);
+            height: var(--sz);
+            border-radius: 9999px;
+            transform: translate(-50%, -50%) rotate(var(--a)) translateY(0);
+            background:
+              radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 38%),
+              radial-gradient(circle, hsl(var(--hue) 100% 65% / .92), hsl(calc(var(--hue) + 18) 100% 62% / .62) 48%, rgba(255,255,255,0) 78%);
+            box-shadow:
+              0 0 22px hsl(var(--hue) 100% 70% / .42),
+              0 0 34px hsl(calc(var(--hue) + 30) 100% 68% / .20);
+            opacity: 0;
+            animation: x-pop var(--dur) ease-out var(--delay) infinite;
+          }
+          @keyframes x-pop{
+            0%{ opacity:0; transform: translate(-50%, 22px) rotate(var(--a)) translateY(0) scale(.55); filter: blur(.18px); }
+            12%{ opacity:0; transform: translate(-50%, 10px) rotate(var(--a)) translateY(0) scale(.7); }
+            18%{ opacity: 1; transform: translate(-50%, -10px) rotate(var(--a)) translateY(0) scale(1.05); }
+            44%{ opacity: .95; transform: translate(-50%, -10px) rotate(var(--a)) translateY(calc(var(--r) * -1px)) scale(.98); }
+            72%{ opacity: .18; transform: translate(-50%, -10px) rotate(var(--a)) translateY(calc(var(--r) * -1px)) scale(.78); filter: blur(.75px); }
+            100%{ opacity:0; transform: translate(-50%, -10px) rotate(var(--a)) translateY(calc(var(--r) * -1px)) scale(.62); filter: blur(1.1px); }
+          }
+          .x-fw-fade{
+            position:absolute;
+            left:50%;
+            top:50%;
+            width: calc(var(--r) * 2px);
+            height: calc(var(--r) * 2px);
+            border-radius: 9999px;
+            transform: translate(-50%, -50%);
+            background:
+              radial-gradient(circle, hsl(var(--hue) 100% 70% / .26), hsl(calc(var(--hue) + 40) 100% 68% / .14) 38%, rgba(255,255,255,0) 62%);
+            filter: blur(5px);
+            opacity: 0;
+            animation: x-bloom var(--dur) ease-out var(--delay) infinite;
+          }
+          @keyframes x-bloom{
+            0%{ opacity:0; transform: translate(-50%, 22px) scale(.15); }
+            18%{ opacity: .0; transform: translate(-50%, -10px) scale(.2); }
+            34%{ opacity: .6; transform: translate(-50%, -10px) scale(1.02); }
+            70%{ opacity: .14; transform: translate(-50%, -10px) scale(1.1); }
+            100%{ opacity:0; transform: translate(-50%, -10px) scale(1.14); }
+          }
         `}
       </style>
 
@@ -289,31 +457,51 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
         <div className="absolute -top-24 -left-24 h-60 w-60 sm:h-72 sm:w-72 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -bottom-24 -right-24 h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-emerald-300/10 blur-3xl" />
         <div className="absolute left-1/2 top-16 sm:top-20 h-44 w-44 sm:h-56 sm:w-56 -translate-x-1/2 rounded-full bg-sky-300/10 blur-3xl" />
+
+        <div className="x-moon-wrap">
+          <div className="x-moon" />
+          <div className="x-cloud x-cloud-1" />
+          <div className="x-cloud x-cloud-2" />
+        </div>
       </div>
 
       <div className="pointer-events-none absolute inset-0">
         {flakes.map((f) => (
-          <span
+          <div
             key={f.id}
-            className="absolute top-[-12%] rounded-full bg-white"
+            className="x-fw"
             style={
               {
                 left: `${f.left}%`,
-                width: `${f.size}px`,
-                height: `${f.size}px`,
-                opacity: f.opacity,
-                filter: "blur(0.2px)",
-                animation: `snowFall ${f.duration}s linear ${f.delay}s infinite`,
-                transform: `translateX(${f.drift}px)`,
-                ["--drift"]: `${f.drift}px`,
-              } as React.CSSProperties & { ["--drift"]: string }
+                top: `${f.top}%`,
+                ["--hue" as any]: f.hue,
+                ["--dur" as any]: `${f.duration}s`,
+                ["--delay" as any]: `${f.delay}s`,
+                ["--sz" as any]: `${f.size}px`,
+                ["--r" as any]: f.radius,
+              } as React.CSSProperties
             }
-          />
+          >
+            <span className="x-fw-fade" />
+            <span className="x-fw-core" />
+            {fwAngles.map((a) => (
+              <span
+                key={`${f.id}-${a}`}
+                className="x-fw-p"
+                style={
+                  {
+                    ["--a" as any]: `${a}deg`,
+                    ["--hue" as any]: (f.hue + ((a / 360) * 140) * 0.9) % 360,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
+          </div>
         ))}
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 py-8 sm:py-14 x-tight-pad">
-        <Navigation onNewYear={onNewYear} />
+        <NewYearNavigation />
 
         <div className="mt-8 sm:mt-14 grid gap-8 sm:gap-10 lg:grid-cols-2 lg:items-center">
           <div className="min-w-0">
@@ -323,7 +511,7 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
             </div>
 
             <h1 className="mt-4 sm:mt-6 text-[clamp(24px,6vw,48px)] lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Merry Christmas,{" "}
+              Happy New Year,{" "}
               <span className="inline-flex items-baseline">
                 <span className="whitespace-nowrap">{typed}</span>
                 <span className="ml-1 inline-block h-[0.95em] w-0.5 bg-white/90" style={{ animation: "caretBlink 0.9s steps(1) infinite" }} />
@@ -332,21 +520,21 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
             </h1>
 
             <p className="mt-3 sm:mt-4 text-[clamp(14px,3.6vw,18px)] text-white/80">
-              May your heart feel calm, your dreams grow, and your days sparkle with hope. I’m grateful for you always cheering for you adooooy!
+              New year, new chapter. I hope 2026 treats you gently, gives you peace, and makes you smile more, adooooy!
             </p>
 
             <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
-              <button className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]" onClick={() => setOpenModal(true)}>
+              <button
+                className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]"
+                onClick={() => setOpenModal(true)}
+              >
                 Open Surprise
               </button>
-              <button className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]" onClick={() => setOpenScroll(true)}>
-                Read Message
-              </button>
               <button
-                className="w-full sm:w-auto rounded-2xl border border-emerald-300/30 bg-emerald-400/20 px-5 py-3 font-semibold text-white shadow-sm hover:bg-emerald-400/30 active:scale-[0.99]"
-                onClick={() => onNewYear?.()}
+                className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]"
+                onClick={() => setOpenScroll(true)}
               >
-                New Year Surprise
+                Read Message
               </button>
             </div>
           </div>
@@ -355,7 +543,7 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
             <div className="absolute -inset-3 sm:-inset-6 rounded-4xl bg-linear-to-r from-white/10 via-emerald-400/15 to-white/10 blur-2xl" />
             <img
               src="/bluegift.png"
-              alt="Christmas"
+              alt="New Year"
               className="relative w-full h-auto max-h-[36vh] sm:max-h-120 object-contain drop-shadow-sm select-none transform-gpu will-change-transform motion-safe:animate-[giftSoftShake_3s_ease-in-out_infinite]"
               style={{ animation: "giftSoftShake 3s ease-in-out infinite", transformOrigin: "50% 85%" }}
             />
@@ -409,7 +597,7 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
           </div>
         </div>
 
-        <Footer />
+        <NewYearFooter />
       </div>
 
       {openModal && (
@@ -435,7 +623,10 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
                 </div>
 
                 <div className="relative h-full w-full overflow-visible transform-gpu transition-transform duration-200" style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}>
-                  <div className="absolute left-1/2 top-1/2 w-[72%] sm:w-[46%] -translate-x-[160%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer" onClick={prev}>
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[72%] sm:w-[46%] -translate-x-[160%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer"
+                    onClick={prev}
+                  >
                     <figure className="relative rounded-[22px] sm:rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
                       <div className="px-4 pt-3">
                         <div className="text-white font-semibold text-xs sm:text-sm truncate">{slides[leftIdx]?.title}</div>
@@ -467,7 +658,10 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
                     </figure>
                   </div>
 
-                  <div className="absolute left-1/2 top-1/2 w-[72%] sm:w-[46%] translate-x-[60%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer" onClick={next}>
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[72%] sm:w-[46%] translate-x-[60%] -translate-y-1/2 scale-[.9] opacity-70 blur-[0.5px] transition-all duration-500 ease-out cursor-pointer"
+                    onClick={next}
+                  >
                     <figure className="relative rounded-[22px] sm:rounded-[26px] overflow-hidden border border-white/20 shadow-xl bg-white/5 backdrop-blur">
                       <div className="px-4 pt-3">
                         <div className="text-white font-semibold text-xs sm:text-sm truncate">{slides[rightIdx]?.title}</div>
@@ -507,27 +701,30 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
                 ✕
               </button>
             </div>
+
             <div className="relative mx-auto w-full animate-[scrollUnroll_.28s_ease-out]">
               <img src="/scroll.png" alt="" className="w-full h-auto max-h-[80vh] sm:max-h-[85vh] object-contain" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-[70%] sm:w-[58%] max-h-[42vh] sm:max-h-[50vh] overflow-y-auto x-scroll-pretty px-5 sm:px-8 pt-[clamp(44px,11vh,120px)] pb-[clamp(44px,11vh,120px)] text-white text-justify text-[clamp(13px,3.6vw,16px)] leading-7">
-                  <h2 className="text-center text-[clamp(18px,6vw,30px)] sm:text-1xl font-bold tracking-wide">A Letter For My Favorite Person</h2>
+                  <h2 className="text-center text-[clamp(18px,6vw,30px)] sm:text-1xl font-bold tracking-wide">A New Year Letter For My Favorite Person</h2>
+
                   <p className="mt-3 sm:mt-4">
-                    Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy lagi. Sana okay lang ikaw palagi Adoooooy.
+                    Hello Adooooyyyyy, kumusta? Happy New Year sa’yo at kay baby aquiiii, and syempre sa family mo din. Sana safe kayo palagi and healthy lagi.
                   </p>
                   <p className="mt-3 sm:mt-4">
-                    Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise na ganto kapag para sayo. Hindi ko na din nga alam kung matututwa ka pa sa gantong trip ko eh hehe, pero gusto ko lang sabihin na lahat ng gantong ginagawa ko ay galing sa aking heart. Gusto ko lang talaga na mapasaya ka kahit papano, kahit na hindi naman talaa tayo nag kikita tska hindi din ganun masyado nang nag uusap.
+                    New year na, pero same pa rin ako: I enjoy doing surprises kapag para sayo. Sana maramdaman mo pa rin na sincere lahat ng to, galing sa heart.
                   </p>
                   <p className="mt-3 sm:mt-4">
-                    Pero not gonna lie, alam mo ba na iniisip parin kita? hindi lang madalas, kundi palagi. Pasensya na kung minsan napapansin mo na sobrang downbad ako ha, pero sinusunod ko yung sinasabi mo na piliin ko maging masaya, Gustong gusto kong mag rant sayo about sa mga nangyayare na sa life ko, pero nahihiya na ko kasi dadagdag pa ba ako sa mga iniisip mo? kung alam mo lang kung gaano kita gusto kausap at kausapin. Alam ko nasabi ko na sayo to pero ewan, yun talaga nararamdaman ko.
+                    Alam mo ba na iniisip parin kita? not always, but a lot. Pasensya na kung minsan sobrang downbad ako, pero sinusubukan ko yung sinabi mo—piliin ko maging masaya.
                   </p>
                   <p className="mt-3 sm:mt-4">
-                    Kaya kahit mabasa mo lang to, okay na ko. Kahit walang response or anything, okay na ako. Naalala mo yung mga sinabi ko nung unang message ko? Ganun parin yun walang nag bago. si YODA parin talaga eh. So ayun lang gusto ko lang sabihin sayo Adooy, na kahit anong mangyari, andito parin ako. Lagi parin kitang susuportahan sa mga goals mo, sa mga pangarap mo, sa mga gusto mong gawin. Lagi parin kitang mamahalin kahit anong mangyari.
+                    Kahit mabasa mo lang to, okay na ko. Kahit walang response, okay na ako. Same pa rin yung sinabi ko dati—si YODA parin talaga.
                   </p>
                   <p className="mt-3 sm:mt-4">
-                    Bawi ako soon, Roblox ulet tayo. Iiwasan ko na ma end yung streak, ayoko mag promise kasi naka ilang ulet na, pero susubukan ko parin po. Ingat ka palagi Adooy, at tandaan mo...
+                    Ingat ka palagi Adooy, and this year… sana mas maging okay lahat. Lagi parin kitang susuportahan sa goals mo, sa pangarap mo, sa lahat.
                   </p>
-                  <p className="mt-5 sm:mt-6 text-right font-semibold">Mahalaga ka palagi, Merry Christmas! ✨</p>
+
+                  <p className="mt-5 sm:mt-6 text-right font-semibold">Happy New Year! ✨</p>
                 </div>
               </div>
             </div>
