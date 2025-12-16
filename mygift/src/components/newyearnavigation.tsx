@@ -12,26 +12,45 @@ export default function NewYearNavigation() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playlist = [
-    { title: "LANY - ILYSB", src: "/ILYSB.mp3", img: "/ilysb.jpg" },
-    { title: "LANY - Stuck", src: "/stuck.mp3", img: "/stuck.png" },
-    { title: "LANY - Know You Naked", src: "/know-you-naked.mp3", img: "/know-you-naked.jpg" },
-    { title: "LANY - Super Far", src: "/super-far.mp3", img: "/super-far.jpg" },
-    { title: "LANY - Last Forever", src: "/last-forever.mp3", img: "/last-forever.jpg" },
-    { title: "LANY - Good Girls", src: "/good-girls.mp3", img: "/good-girls.jpg" },
-    { title: "LANY - Good Guys", src: "/good-guys.mp3", img: "/good-guys.jpg" },
-    { title: "LANY - 13", src: "/13.mp3", img: "/13.jpg" },
-    { title: "LANY - Make Me Forget", src: "/make-me-forget.mp3", img: "/make-me-forget.jpg" },
-    { title: "LANY - Hericane", src: "/hericane.mp3", img: "/hericane.jpg" },
-    { title: "LANY - Thick and Thin", src: "/thick-and-thin.mp3", img: "/thick-and-thin.jpg" },
-    { title: "LANY - If You See Her", src: "/if-you-see-her.mp3", img: "/if-you-see-her.jpg" },
-    { title: "LANY - Let Me Know", src: "/let-me-know.mp3", img: "/let-me-know.jpg" },
-    { title: "LANY - Valentine’s Day", src: "/valentines-day.mp3", img: "/valentines-day.jpg" },
-    { title: "LANY - Why", src: "/why.mp3", img: "/why.jpg" },
-    { title: "LANY - Malibu Nights", src: "/malibu-nights.mp3", img: "/malibu-nights.jpg" },
-    { title: "LANY - You!", src: "/you.mp3", img: "/you.jpg" },
-    { title: "LANY - Cowboy In LA", src: "/cowboy-in-la.mp3", img: "/cowboy-in-la.jpg" },
-    { title: "LANY - Mean It", src: "/mean-it.mp3", img: "/mean-it.jpg" },
-    { title: "LANY - Destiny", src: "/destiny.mp3", img: "/destiny.jpg" },
+    { title: "MAKI - Kahel na langit", src: "/kahel-na-langit.mp3", img: "/kahel-na-langit.jpg" },
+
+    { title: "DECEMBER AVENUE - Bulong", src: "/bulong.mp3", img: "/bulong.jpg" },
+
+    { title: "FITTERKARMA - Kalapastanganan", src: "/kalapastanganan.mp3", img: "/kalapastanganan.jpg" },
+
+    { title: "YDEN - Ngalan Mo", src: "/ngalan-mo.mp3", img: "/ngalan-mo.png" },
+    
+    { title: "ELIZA MATURAN - Museo", src: "/museo.mp3", img: "/museo.jpg" },
+
+    { title: "EARL AGUSTIN - Tibok", src: "/tibok.mp3", img: "/tibok.jpg" },
+
+    { title: "ARTHUR NERY - Isa Lang", src: "/isa-lang.mp3", img: "/isa-lang.jpg" },
+
+    { title: "ADIE - Mahika", src: "/mahika.mp3", img: "/mahika.jpg" },
+
+    { title: "RHODESSA - Kisame", src: "/kisame.mp3", img: "/kisame.jpg" },
+
+    { title: "FITTERKARMA - Pagibig ay Kanibalismo II", src: "/pagibig-ay-kanibalismo.mp3", img: "/pagibig-ay-kanibalismo.jpg" },
+
+    { title: "KIYO - Ikaw Lang", src: "/ikaw-lang.mp3", img: "/ikaw-lang.jpg" },
+
+    { title: "KIYO X ALISSON SHORE - Urong Sulong", src: "/urong-sulong.mp3", img: "/urong-sulong.jpg" },
+
+    { title: "IV OF SPADE - Aura", src: "/aura.mp3", img: "/aura.jpg" },
+
+    { title: "KIYO - Eba", src: "/eba.mp3", img: "/eba.jpg" },
+
+    { title: "7TH - Mata sa Mata", src: "/mata-sa-mata.mp3", img: "/mata-sa-mata.jpg" },
+
+    { title: "MRLD - Ligaya", src: "/ligaya.mp3", img: "/ligaya.png" },
+
+    { title: "KENANIAH - Bahala Na", src: "/bahala-na.mp3", img: "/bahala-na.jpg" },
+
+    { title: "SUGARCANE - Kung Maging Akin Ka", src: "/kung-maging-akin-ka.mp3", img: "/kung-maging-akin-ka.jpg" },
+
+    { title: "SUD - Sila", src: "/sila.mp3", img: "/sila.jpg" },
+
+    { title: "UP DHARMA DOWN - Tadhana", src: "/tadhana.mp3", img: "/tadhana.png" },
   ];
 
   useEffect(() => {
@@ -126,6 +145,11 @@ export default function NewYearNavigation() {
   };
 
   const pct = duration ? Math.max(0, Math.min(100, Math.floor((currentTime / duration) * 100))) : 0;
+
+  const goChristmas = () => {
+    setOpen(false);
+    window.dispatchEvent(new CustomEvent("app:navigate", { detail: { page: "christmas" } }));
+  };
 
   return (
     <>
@@ -227,14 +251,13 @@ export default function NewYearNavigation() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-white font-semibold text-xs sm:text-sm">
-                {countdown}
-              </div>
-            </div>
+            <div className="hidden"></div>
 
-            <button className="hidden sm:inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]">
-              New Year Surprise
+            <button
+              onClick={goChristmas}
+              className="hidden sm:inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]"
+            >
+              Christmas Surprise
             </button>
 
             <button
@@ -279,8 +302,11 @@ export default function NewYearNavigation() {
               {fmt(currentTime)} / {fmt(duration)}
             </div>
           </div>
-          <button className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]">
-            New Year Surprise
+          <button
+            onClick={goChristmas}
+            className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]"
+          >
+            Christmas Surprise
           </button>
         </div>
       </div>

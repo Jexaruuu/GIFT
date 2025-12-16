@@ -219,7 +219,8 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
           @keyframes snowFall { 0% { transform: translateX(var(--drift, 0px)) translateY(-20vh); } 100% { transform: translateX(var(--drift, 0px)) translateY(120vh); } }
           @keyframes giftSoftShake { 0%, 40% { transform: translate3d(0,0,0) rotate(0deg); } 46% { transform: translate3d(3px, 0, 0) rotate(3deg); } 50% { transform: translate3d(0, 0, 0) rotate(0deg); } 54% { transform: translate3d(-3px, 0, 0) rotate(-3deg); } 58% { transform: translate3d(0, 0, 0) rotate(0deg); } 100% { transform: translate3d(0, 0, 0) rotate(0deg); } }
           @keyframes caretBlink { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
-          @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); } }
+          @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); }
+          }
           @keyframes glowPulse { 0%,100% { opacity:.25; filter: blur(30px); } 50% { opacity:.5; filter: blur(45px); } }
           @keyframes scrollUnroll { 0% { transform: scaleY(.9); opacity: 0; } 100% { transform: scaleY(1); opacity: 1); } }
           .x-scroll{
@@ -268,17 +269,69 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
             pointer-events: none;
             transition: transform 120ms ease, opacity 120ms ease;
-            z-index: 9999;
+            z-index: 100000;
             opacity: var(--opacity, 0);
             will-change: transform;
           }
           .x-cursor:after{ content:""; position:absolute; inset:-6px; border-radius:9999px; background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0)); filter: blur(6px); opacity:.6; }
-          .x-ring { position: fixed; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 9999px; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5); pointer-events: none; z-index: 9998; animation: x-ping .6s ease-out forwards; }
+          .x-ring { position: fixed; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 9999px; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5); pointer-events: none; z-index: 99999; animation: x-ping .6s ease-out forwards; }
           @keyframes x-ping { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(5); } }
           @keyframes tiltFloat {
             0% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
             50% { transform: perspective(800px) rotate(4deg) translateY(-4px) scale(1.02); }
             100% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
+          }
+
+          .ny-modal{
+            animation: nyFadeIn .24s ease-out both;
+            background-image:
+              radial-gradient(1200px 400px at 10% -10%, rgba(59,130,246,.25), transparent 60%),
+              radial-gradient(900px 360px at 110% 10%, rgba(147,197,253,.22), transparent 60%),
+              linear-gradient(180deg, rgba(30,58,138,.88), rgba(23,37,84,.94) 60%, rgba(15,23,42,.97));
+          }
+          @keyframes nyFadeIn { from{ transform: translateY(8px) scale(.98); opacity:0 } to{ transform: translateY(0) scale(1); opacity:1 } }
+          .ny-sheen{
+            position:absolute; inset:-1px; border-radius: 1.5rem;
+            background-image: linear-gradient(120deg, rgba(255,255,255,.08), transparent 30%, transparent 70%, rgba(255,255,255,.06));
+            mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            padding:1px; border:1px solid rgba(255,255,255,.12);
+          }
+          .ny-sparkle{
+            position:absolute; width:6px; height:6px; border-radius:9999px; background:rgba(255,255,255,.9);
+            box-shadow: 0 0 12px rgba(147,197,253,.85), 0 0 20px rgba(59,130,246,.65);
+            animation: sparkle .9s ease-in-out infinite;
+          }
+          .ny-sparkle:nth-child(1){ left:6%; top:12%; animation-delay:.1s }
+          .ny-sparkle:nth-child(2){ right:8%; top:16%; animation-delay:.35s }
+          .ny-sparkle:nth-child(3){ left:12%; bottom:10%; animation-delay:.55s }
+          .ny-sparkle:nth-child(4){ right:10%; bottom:12%; animation-delay:.75s }
+          @keyframes sparkle { 0%,100%{ transform: scale(.8); opacity:.6 } 50%{ transform: scale(1.25); opacity:1 } }
+          .ny-chip{
+            background: linear-gradient(180deg, rgba(191,219,254,.16), rgba(59,130,246,.16));
+            border: 1px solid rgba(191,219,254,.22);
+          }
+
+          .xm-modal{
+            animation: nyFadeIn .24s ease-out both;
+            background-image:
+              radial-gradient(1200px 420px at 8% -10%, rgba(125,211,252,.28), transparent 60%),
+              radial-gradient(900px 360px at 110% 10%, rgba(186,230,253,.26), transparent 60%),
+              linear-gradient(180deg, rgba(15,118,211,.82), rgba(30,64,175,.92) 60%, rgba(12,18,32,.96));
+          }
+          .xm-chip{
+            background: linear-gradient(180deg, rgba(191,219,254,.22), rgba(96,165,250,.22));
+            border: 1px solid rgba(191,219,254,.28);
+          }
+          .xm-sparkle{
+            position:absolute; width:6px; height:6px; border-radius:9999px; background:rgba(255,255,255,.95);
+            box-shadow: 0 0 14px rgba(125,211,252,.9), 0 0 22px rgba(59,130,246,.7);
+            animation: sparkle 1s ease-in-out infinite;
+          }
+          .xm-snowflake{
+            position:absolute; top:-8%; width:8px; height:8px; border-radius:9999px; background: white; opacity:.7; filter: blur(.2px);
+            animation: snowFall var(--dur) linear var(--delay) infinite;
+            transform: translateX(var(--drift, 0px));
           }
         `}
       </style>
@@ -337,16 +390,10 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
 
             <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
               <button className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]" onClick={() => setOpenModal(true)}>
-                Open Surprise
+                Open Christmas Surprise
               </button>
               <button className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]" onClick={() => setOpenScroll(true)}>
-                Read Message
-              </button>
-              <button
-                className="w-full sm:w-auto rounded-2xl border border-emerald-300/30 bg-emerald-400/20 px-5 py-3 font-semibold text-white shadow-sm hover:bg-emerald-400/30 active:scale-[0.99]"
-                onClick={() => onNewYear?.()}
-              >
-                New Year Surprise
+                Christmas Message
               </button>
             </div>
           </div>
@@ -507,28 +554,69 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
                 ✕
               </button>
             </div>
-            <div className="relative mx-auto w-full animate-[scrollUnroll_.28s_ease-out]">
-              <img src="/scroll.png" alt="" className="w-full h-auto max-h-[80vh] sm:max-h-[85vh] object-contain" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[70%] sm:w-[58%] max-h-[42vh] sm:max-h-[50vh] overflow-y-auto x-scroll-pretty px-5 sm:px-8 pt-[clamp(44px,11vh,120px)] pb-[clamp(44px,11vh,120px)] text-white text-justify text-[clamp(13px,3.6vw,16px)] leading-7">
-                  <h2 className="text-center text-[clamp(18px,6vw,30px)] sm:text-1xl font-bold tracking-wide">A Letter For My Favorite Person</h2>
-                  <p className="mt-3 sm:mt-4">
-                    Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy lagi. Sana okay lang ikaw palagi Adoooooy.
-                  </p>
-                  <p className="mt-3 sm:mt-4">
-                    Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise na ganto kapag para sayo. Hindi ko na din nga alam kung matututwa ka pa sa gantong trip ko eh hehe, pero gusto ko lang sabihin na lahat ng gantong ginagawa ko ay galing sa aking heart. Gusto ko lang talaga na mapasaya ka kahit papano, kahit na hindi naman talaa tayo nag kikita tska hindi din ganun masyado nang nag uusap.
-                  </p>
-                  <p className="mt-3 sm:mt-4">
-                    Pero not gonna lie, alam mo ba na iniisip parin kita? hindi lang madalas, kundi palagi. Pasensya na kung minsan napapansin mo na sobrang downbad ako ha, pero sinusunod ko yung sinasabi mo na piliin ko maging masaya, Gustong gusto kong mag rant sayo about sa mga nangyayare na sa life ko, pero nahihiya na ko kasi dadagdag pa ba ako sa mga iniisip mo? kung alam mo lang kung gaano kita gusto kausap at kausapin. Alam ko nasabi ko na sayo to pero ewan, yun talaga nararamdaman ko.
-                  </p>
-                  <p className="mt-3 sm:mt-4">
-                    Kaya kahit mabasa mo lang to, okay na ko. Kahit walang response or anything, okay na ako. Naalala mo yung mga sinabi ko nung unang message ko? Ganun parin yun walang nag bago. si YODA parin talaga eh. So ayun lang gusto ko lang sabihin sayo Adooy, na kahit anong mangyari, andito parin ako. Lagi parin kitang susuportahan sa mga goals mo, sa mga pangarap mo, sa mga gusto mong gawin. Lagi parin kitang mamahalin kahit anong mangyari.
-                  </p>
-                  <p className="mt-3 sm:mt-4">
-                    Bawi ako soon, Roblox ulet tayo. Iiwasan ko na ma end yung streak, ayoko mag promise kasi naka ilang ulet na, pero susubukan ko parin po. Ingat ka palagi Adooy, at tandaan mo...
-                  </p>
-                  <p className="mt-5 sm:mt-6 text-right font-semibold">Mahalaga ka palagi, Merry Christmas! ✨</p>
+
+            <div className="relative mx-auto w-full xm-modal ny-modal rounded-3xl border border-blue-100/30 backdrop-blur-2xl shadow-[0_30px_80px_rgba(2,6,23,0.65)] overflow-hidden">
+              <div className="ny-sheen pointer-events-none"></div>
+
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-4">
+                <div className="xm-chip text-white/90 text-xs sm:text-sm rounded-full px-3 py-1.5 shadow-[0_6px_18px_rgba(59,130,246,0.35)]">
+                  Christmas 2025 • Snow Edition
                 </div>
+              </div>
+
+              <div className="absolute inset-0 -z-1">
+                <div className="xm-sparkle" style={{ left: "7%", top: "14%", animationDelay: ".1s" }} />
+                <div className="xm-sparkle" style={{ right: "10%", top: "18%", animationDelay: ".35s" }} />
+                <div className="xm-sparkle" style={{ left: "12%", bottom: "12%", animationDelay: ".6s" }} />
+                <div className="xm-sparkle" style={{ right: "12%", bottom: "14%", animationDelay: ".8s" }} />
+              </div>
+
+              <div className="pointer-events-none absolute inset-0">
+                {Array.from({ length: 24 }).map((_, i) => {
+                  const left = (i * 100) / 24;
+                  const size = 4 + (i % 5);
+                  const dur = 7 + (i % 6);
+                  const delay = (i % 8) * 0.4;
+                  const drift = -14 + (i % 7) * 4;
+                  return (
+                    <span
+                      key={`xmflake-${i}`}
+                      className="xm-snowflake"
+                      style={
+                        {
+                          left: `${left}%`,
+                          width: `${size}px`,
+                          height: `${size}px`,
+                          ["--dur" as any]: `${dur}s`,
+                          ["--delay" as any]: `${delay}s`,
+                          ["--drift" as any]: `${drift}px`,
+                        } as React.CSSProperties
+                      }
+                    />
+                  );
+                })}
+              </div>
+
+              <div className="px-5 sm:px-8 pt-8 sm:pt-10 pb-6 sm:pb-8 relative">
+                <div className="text-center">
+                  <h2 className="text-white text-[clamp(18px,6vw,28px)] font-semibold tracking-wide">
+                    A Christmas Letter For My Favorite Person
+                  </h2>
+                  
+                </div>
+
+                <div className="mt-5 sm:mt-6 rounded-2xl border border-blue-100/25 bg-white/10">
+                  <div className="max-h-[48vh] sm:max-h-[56vh] overflow-y-auto x-scroll-pretty px-5 sm:px-7 py-5 sm:py-6 text-white/90 text-[clamp(13px,3.6vw,16px)] leading-7 text-justify">
+                    <p>Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy. Sana okay lang ikaw palagi Adoooooy.</p>
+                    <p className="mt-3 sm:mt-4">Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise na ganto kapag para sayo. Hindi ko na din nga alam kung matututwa ka pa sa gantong trip ko eh hehe, pero gusto ko lang sabihin na lahat ng gantong ginagawa ko ay galing sa aking heart. Gusto ko lang talaga na mapasaya ka kahit papano, kahit na hindi naman talaa tayo nag kikita tska hindi din ganun masyado nang nag uusap.</p>
+                    <p className="mt-3 sm:mt-4">Pero not gonna lie, alam mo ba na iniisip parin kita? hindi lang madalas, kundi palagi. Pasensya na kung minsan napapansin mo na sobrang downbad ako ha, pero sinusunod ko yung sinasabi mo na piliin ko maging masaya, Gustong gusto kong mag rant sayo about sa mga nangyayare na sa life ko, pero nahihiya na ko kasi dadagdag pa ba ako sa mga iniisip mo? kung alam mo lang kung gaano kita gusto kausap at kausapin. Alam ko nasabi ko na sayo to pero ewan, yun talaga nararamdaman ko.</p>
+                    <p className="mt-3 sm:mt-4">Kaya kahit mabasa mo lang to, okay na ko. Kahit walang response or anything, okay na ako. Naalala mo yung mga sinabi ko nung unang message ko? Ganun parin yun walang nag bago. si YODA parin talaga eh. So ayun lang gusto ko lang sabihin sayo Adooy, na kahit anong mangyari, andito parin ako. Lagi parin kitang susuportahan sa mga goals mo, sa mga pangarap mo, sa mga gusto mong gawin. Lagi parin kitang mamahalin kahit anong mangyari.</p>
+                    <p className="mt-3 sm:mt-4">Bawi ako soon, Roblox ulet tayo. Iiwasan ko na ma end yung streak, ayoko mag promise kasi naka ilang ulet na, pero susubukan ko parin po. Ingat ka palagi Adooy, at tandaan mo...</p>
+                    <p className="mt-5 sm:mt-6 text-right font-semibold">Mahalaga ka palagi, Merry Christmas! ✨</p>
+                  </div>
+                </div>
+
+                
               </div>
             </div>
           </div>

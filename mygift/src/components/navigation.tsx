@@ -125,6 +125,11 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
 
   const pct = duration ? Math.max(0, Math.min(100, Math.floor((currentTime / duration) * 100))) : 0;
 
+  const goNewYear = () => {
+    if (onNewYear) onNewYear();
+    else window.dispatchEvent(new CustomEvent("app:navigate", { detail: { page: "newyear" } }));
+  };
+
   return (
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');`}</style>
@@ -229,7 +234,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
 
             <button
               className="hidden sm:inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]"
-              onClick={() => onNewYear?.()}
+              onClick={goNewYear}
             >
               New Year Surprise
             </button>
@@ -273,7 +278,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
             </div>
           </div>
 
-          <button className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]" onClick={() => onNewYear?.()}>
+          <button className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]" onClick={goNewYear}>
             New Year Surprise
           </button>
         </div>
