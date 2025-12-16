@@ -9,6 +9,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
   const [index, setIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [unlocked, setUnlocked] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playlist = [
@@ -92,6 +93,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
       diff -= m * 60 * 1000;
       const s = Math.floor(diff / 1000);
       setCountdown(`${String(d).padStart(2, "0")}d : ${String(h).padStart(2, "0")}h : ${String(m).padStart(2, "0")}m : ${String(s).padStart(2, "0")}s`);
+      if (target <= now) setUnlocked(true);
     };
     tick();
     const id = setInterval(tick, 1000);
@@ -126,6 +128,7 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
   const pct = duration ? Math.max(0, Math.min(100, Math.floor((currentTime / duration) * 100))) : 0;
 
   const goNewYear = () => {
+    if (!unlocked) return;
     if (onNewYear) onNewYear();
     else window.dispatchEvent(new CustomEvent("app:navigate", { detail: { page: "newyear" } }));
   };
@@ -233,8 +236,10 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
             </div>
 
             <button
-              className="hidden sm:inline-flex rounded-xl bg-blue-500 px-3 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-600 active:scale-[0.99]"
+              className={`hidden sm:inline-flex rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-white active:scale-[0.99] ${unlocked ? "bg-blue-500 hover:bg-blue-600" : "bg-white/10 border border-white/15 cursor-not-allowed opacity-60"}`}
               onClick={goNewYear}
+              disabled={!unlocked}
+              aria-disabled={!unlocked}
             >
               New Year Surprise
             </button>
@@ -278,7 +283,12 @@ export default function Navigation({ onNewYear }: { onNewYear?: () => void } = {
             </div>
           </div>
 
-          <button className="rounded-xl bg-blue-500 px-3 py-2 font-semibold text-white hover:bg-blue-600 active:scale-[0.99]" onClick={goNewYear}>
+          <button
+            className={`rounded-xl px-3 py-2 font-semibold text-white active:scale-[0.99] ${unlocked ? "bg-blue-500 hover:bg-blue-600" : "bg-white/10 border border-white/15 cursor-not-allowed opacity-60"}`}
+            onClick={goNewYear}
+            disabled={!unlocked}
+            aria-disabled={!unlocked}
+          >
             New Year Surprise
           </button>
         </div>
