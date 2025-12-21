@@ -2,6 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Navigation from "../components/navigation";
 import Footer from "../components/footer";
 
+type GingerCrumb = { k: number; dx: number; dy: number; rot: number; sz: number; o: number };
+type GingerSplash = { id: number; x: number; y: number; crumbs: GingerCrumb[] };
+
 export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = {}) {
   const flakes = useMemo(
     () =>
@@ -54,12 +57,32 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
   const [pressed, setPressed] = useState(false);
   const [rings, setRings] = useState<Array<{ id: number; x: number; y: number }>>([]);
 
+  const [gingerSplashes, setGingerSplashes] = useState<GingerSplash[]>([]);
+
   useEffect(() => {
     const img = new Image();
     img.src = cursorUrl;
   }, [cursorUrl]);
 
   useEffect(() => {
+    const addGingerSplash = (x: number, y: number) => {
+      const id = Date.now() + Math.floor(Math.random() * 1000);
+      const n = 14 + Math.floor(Math.random() * 8);
+      const crumbs: GingerCrumb[] = Array.from({ length: n }).map((_, i) => {
+        const a = Math.random() * Math.PI * 2;
+        const r = 40 + Math.random() * 120;
+        const dx = Math.cos(a) * r;
+        const dy = Math.sin(a) * r * (0.9 + Math.random() * 0.3);
+        const rot = (Math.random() * 260 - 130) * (Math.random() < 0.4 ? 1.4 : 1);
+        const sz = 6 + Math.random() * 12;
+        const o = 0.75 + Math.random() * 0.25;
+        return { k: id + i, dx, dy, rot, sz, o };
+      });
+
+      setGingerSplashes((s) => [...s, { id, x, y, crumbs }]);
+      window.setTimeout(() => setGingerSplashes((s) => s.filter((t) => t.id !== id)), 720);
+    };
+
     const move = (e: MouseEvent) => {
       setCx(e.clientX);
       setCy(e.clientY);
@@ -71,19 +94,35 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
       const id = Date.now();
       setRings((r) => [...r, { id, x: e.clientX, y: e.clientY }]);
       setTimeout(() => setRings((r) => r.filter((t) => t.id !== id)), 600);
+      addGingerSplash(e.clientX, e.clientY);
     };
     const up = () => setPressed(false);
+
+    const touchStart = (e: TouchEvent) => {
+      const t = e.touches?.[0];
+      if (!t) return;
+      setPressed(true);
+      const id = Date.now();
+      setRings((r) => [...r, { id, x: t.clientX, y: t.clientY }]);
+      setTimeout(() => setRings((r) => r.filter((q) => q.id !== id)), 600);
+      addGingerSplash(t.clientX, t.clientY);
+      setTimeout(() => setPressed(false), 90);
+    };
+
     window.addEventListener("mousemove", move, { passive: true });
     window.addEventListener("mouseenter", move, { passive: true });
     window.addEventListener("mouseleave", leave);
     window.addEventListener("mousedown", down);
     window.addEventListener("mouseup", up);
+    window.addEventListener("touchstart", touchStart, { passive: true });
+
     return () => {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseenter", move);
       window.removeEventListener("mouseleave", leave);
       window.removeEventListener("mousedown", down);
       window.removeEventListener("mouseup", up);
+      window.removeEventListener("touchstart", touchStart);
     };
   }, []);
 
@@ -219,8 +258,7 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
           @keyframes snowFall { 0% { transform: translateX(var(--drift, 0px)) translateY(-20vh); } 100% { transform: translateX(var(--drift, 0px)) translateY(120vh); } }
           @keyframes giftSoftShake { 0%, 40% { transform: translate3d(0,0,0) rotate(0deg); } 46% { transform: translate3d(3px, 0, 0) rotate(3deg); } 50% { transform: translate3d(0, 0, 0) rotate(0deg); } 54% { transform: translate3d(-3px, 0, 0) rotate(-3deg); } 58% { transform: translate3d(0, 0, 0) rotate(0deg); } 100% { transform: translate3d(0, 0, 0) rotate(0deg); } }
           @keyframes caretBlink { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
-          @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); }
-          }
+          @keyframes cardPop { 0% { transform: translateZ(0) scale(.96); filter: saturate(.9) brightness(.95); } 60% { transform: translateZ(24px) scale(1.02); filter: saturate(1.05) brightness(1.02); } 100% { transform: translateZ(0) scale(1); } }
           @keyframes glowPulse { 0%,100% { opacity:.25; filter: blur(30px); } 50% { opacity:.5; filter: blur(45px); } }
           @keyframes scrollUnroll { 0% { transform: scaleY(.9); opacity: 0; } 100% { transform: scaleY(1); opacity: 1); } }
           .x-scroll{
@@ -276,11 +314,15 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
           .x-cursor:after{ content:""; position:absolute; inset:-6px; border-radius:9999px; background: radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0)); filter: blur(6px); opacity:.6; }
           .x-ring { position: fixed; width: 10px; height: 10px; transform: translate(-50%, -50%); border-radius: 9999px; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 0 18px rgba(59,130,246,.65), inset 0 0 8px rgba(255,255,255,.5); pointer-events: none; z-index: 99999; animation: x-ping .6s ease-out forwards; }
           @keyframes x-ping { 0% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(5); } }
-          @keyframes tiltFloat {
-            0% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
-            50% { transform: perspective(800px) rotate(4deg) translateY(-4px) scale(1.02); }
-            100% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
+
+          .xm-modal{
+            animation: nyFadeIn .24s ease-out both;
+            background-image:
+              radial-gradient(1200px 420px at 8% -10%, rgba(125,211,252,.28), transparent 60%),
+              radial-gradient(900px 360px at 110% 10%, rgba(186,230,253,.26), transparent 60%),
+              linear-gradient(180deg, rgba(15,118,211,.82), rgba(30,64,175,.92) 60%, rgba(12,18,32,.96));
           }
+          @keyframes nyFadeIn { from{ transform: translateY(8px) scale(.98); opacity:0 } to{ transform: translateY(0) scale(1); opacity:1 } }
 
           .ny-modal{
             animation: nyFadeIn .24s ease-out both;
@@ -289,35 +331,12 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
               radial-gradient(900px 360px at 110% 10%, rgba(147,197,253,.22), transparent 60%),
               linear-gradient(180deg, rgba(30,58,138,.88), rgba(23,37,84,.94) 60%, rgba(15,23,42,.97));
           }
-          @keyframes nyFadeIn { from{ transform: translateY(8px) scale(.98); opacity:0 } to{ transform: translateY(0) scale(1); opacity:1 } }
           .ny-sheen{
             position:absolute; inset:-1px; border-radius: 1.5rem;
             background-image: linear-gradient(120deg, rgba(255,255,255,.08), transparent 30%, transparent 70%, rgba(255,255,255,.06));
             mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
             -webkit-mask-composite: xor; mask-composite: exclude;
             padding:1px; border:1px solid rgba(255,255,255,.12);
-          }
-          .ny-sparkle{
-            position:absolute; width:6px; height:6px; border-radius:9999px; background:rgba(255,255,255,.9);
-            box-shadow: 0 0 12px rgba(147,197,253,.85), 0 0 20px rgba(59,130,246,.65);
-            animation: sparkle .9s ease-in-out infinite;
-          }
-          .ny-sparkle:nth-child(1){ left:6%; top:12%; animation-delay:.1s }
-          .ny-sparkle:nth-child(2){ right:8%; top:16%; animation-delay:.35s }
-          .ny-sparkle:nth-child(3){ left:12%; bottom:10%; animation-delay:.55s }
-          .ny-sparkle:nth-child(4){ right:10%; bottom:12%; animation-delay:.75s }
-          @keyframes sparkle { 0%,100%{ transform: scale(.8); opacity:.6 } 50%{ transform: scale(1.25); opacity:1 } }
-          .ny-chip{
-            background: linear-gradient(180deg, rgba(191,219,254,.16), rgba(59,130,246,.16));
-            border: 1px solid rgba(191,219,254,.22);
-          }
-
-          .xm-modal{
-            animation: nyFadeIn .24s ease-out both;
-            background-image:
-              radial-gradient(1200px 420px at 8% -10%, rgba(125,211,252,.28), transparent 60%),
-              radial-gradient(900px 360px at 110% 10%, rgba(186,230,253,.26), transparent 60%),
-              linear-gradient(180deg, rgba(15,118,211,.82), rgba(30,64,175,.92) 60%, rgba(12,18,32,.96));
           }
           .xm-chip{
             background: linear-gradient(180deg, rgba(191,219,254,.22), rgba(96,165,250,.22));
@@ -328,15 +347,93 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
             box-shadow: 0 0 14px rgba(125,211,252,.9), 0 0 22px rgba(59,130,246,.7);
             animation: sparkle 1s ease-in-out infinite;
           }
+          @keyframes sparkle { 0%,100%{ transform: scale(.8); opacity:.6 } 50%{ transform: scale(1.25); opacity:1 } }
           .xm-snowflake{
             position:absolute; top:-8%; width:8px; height:8px; border-radius:9999px; background: white; opacity:.7; filter: blur(.2px);
             animation: snowFall var(--dur) linear var(--delay) infinite;
             transform: translateX(var(--drift, 0px));
           }
+
+          .gb-splat{
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 99998;
+            width: 18px;
+            height: 18px;
+            border-radius: 9999px;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.95), rgba(255,255,255,.0) 60%);
+            mix-blend-mode: screen;
+            animation: gbSplat .52s ease-out forwards;
+          }
+          @keyframes gbSplat{
+            0%{ opacity:.0; transform: translate(-50%, -50%) scale(.4); filter: blur(0px); }
+            20%{ opacity:.85; transform: translate(-50%, -50%) scale(1); }
+            100%{ opacity:0; transform: translate(-50%, -50%) scale(3.6); filter: blur(1.5px); }
+          }
+
+          .gb-crumb{
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 99997;
+            width: var(--sz);
+            height: var(--sz);
+            border-radius: 10px;
+            background:
+              radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 55%),
+              linear-gradient(180deg, rgba(180,110,65,1), rgba(122,70,40,1));
+            border: 1px solid rgba(255,255,255,.18);
+            box-shadow: 0 10px 22px rgba(0,0,0,.28), 0 0 18px rgba(255,255,255,.10);
+            opacity: var(--op);
+            animation: gbCrumb .72s cubic-bezier(.12,.72,.22,1) forwards;
+            will-change: transform, opacity;
+          }
+          .gb-crumb:after{
+            content:"";
+            position:absolute;
+            inset: 18% 22%;
+            border-radius: 9999px;
+            background:
+              radial-gradient(circle at 25% 35%, rgba(255,255,255,.9), rgba(255,255,255,0) 55%),
+              radial-gradient(circle at 70% 65%, rgba(255,255,255,.85), rgba(255,255,255,0) 58%);
+            opacity: .55;
+            filter: blur(.2px);
+          }
+          @keyframes gbCrumb{
+            0%{ transform: translate(-50%, -50%) translate3d(0,0,0) rotate(0deg) scale(1); opacity: var(--op); }
+            65%{ opacity: calc(var(--op) * .85); }
+            100%{ transform: translate(-50%, -50%) translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(.18); opacity: 0; }
+          }
         `}
       </style>
 
       <img src={cursorUrl} alt="" className="hidden" />
+
+      <div className="pointer-events-none fixed inset-0 z-99996">
+        {gingerSplashes.map((s) => (
+          <div key={s.id}>
+            <span className="gb-splat" style={{ left: s.x, top: s.y }} />
+            {s.crumbs.map((c) => (
+              <span
+                key={c.k}
+                className="gb-crumb"
+                style={
+                  {
+                    left: s.x,
+                    top: s.y,
+                    ["--dx" as any]: `${c.dx}px`,
+                    ["--dy" as any]: `${c.dy}px`,
+                    ["--rot" as any]: `${c.rot}deg`,
+                    ["--sz" as any]: `${c.sz}px`,
+                    ["--op" as any]: c.o,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
+          </div>
+        ))}
+      </div>
 
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 -left-24 h-60 w-60 sm:h-72 sm:w-72 rounded-full bg-white/10 blur-3xl" />
@@ -599,24 +696,40 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
 
               <div className="px-5 sm:px-8 pt-8 sm:pt-10 pb-6 sm:pb-8 relative">
                 <div className="text-center">
-                  <h2 className="text-white text-[clamp(18px,6vw,28px)] font-semibold tracking-wide">
-                    A Christmas Letter For My Favorite Person
-                  </h2>
-                  
+                  <h2 className="text-white text-[clamp(18px,6vw,28px)] font-semibold tracking-wide">A Christmas Letter For My Favorite Person</h2>
                 </div>
 
                 <div className="mt-5 sm:mt-6 rounded-2xl border border-blue-100/25 bg-white/10">
                   <div className="max-h-[48vh] sm:max-h-[56vh] overflow-y-auto x-scroll-pretty px-5 sm:px-7 py-5 sm:py-6 text-white/90 text-[clamp(13px,3.6vw,16px)] leading-7 text-justify">
-                    <p>Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy. Sana okay lang ikaw palagi Adoooooy.</p>
-                    <p className="mt-3 sm:mt-4">Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise na ganto kapag para sayo. Hindi ko na din nga alam kung matututwa ka pa sa gantong trip ko eh hehe, pero gusto ko lang sabihin na lahat ng gantong ginagawa ko ay galing sa aking heart. Gusto ko lang talaga na mapasaya ka kahit papano, kahit na hindi naman talaa tayo nag kikita tska hindi din ganun masyado nang nag uusap.</p>
-                    <p className="mt-3 sm:mt-4">Pero not gonna lie, alam mo ba na iniisip parin kita? hindi lang madalas, kundi palagi. Pasensya na kung minsan napapansin mo na sobrang downbad ako ha, pero sinusunod ko yung sinasabi mo na piliin ko maging masaya, Gustong gusto kong mag rant sayo about sa mga nangyayare na sa life ko, pero nahihiya na ko kasi dadagdag pa ba ako sa mga iniisip mo? kung alam mo lang kung gaano kita gusto kausap at kausapin. Alam ko nasabi ko na sayo to pero ewan, yun talaga nararamdaman ko.</p>
-                    <p className="mt-3 sm:mt-4">Kaya kahit mabasa mo lang to, okay na ko. Kahit walang response or anything, okay na ako. Naalala mo yung mga sinabi ko nung unang message ko? Ganun parin yun walang nag bago. si YODA parin talaga eh. So ayun lang gusto ko lang sabihin sayo Adooy, na kahit anong mangyari, andito parin ako. Lagi parin kitang susuportahan sa mga goals mo, sa mga pangarap mo, sa mga gusto mong gawin. Lagi parin kitang mamahalin kahit anong mangyari.</p>
-                    <p className="mt-3 sm:mt-4">Bawi ako soon, Roblox ulet tayo. Iiwasan ko na ma end yung streak, ayoko mag promise kasi naka ilang ulet na, pero susubukan ko parin po. Ingat ka palagi Adooy, at tandaan mo...</p>
+                    <p>
+                      Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby
+                      aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy. Sana okay lang ikaw palagi Adoooooy.
+                    </p>
+                    <p className="mt-3 sm:mt-4">
+                      Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise
+                      na ganto kapag para sayo. Hindi ko na din nga alam kung matututwa ka pa sa gantong trip ko eh hehe, pero gusto ko lang sabihin na lahat ng
+                      gantong ginagawa ko ay galing sa aking heart. Gusto ko lang talaga na mapasaya ka kahit papano, kahit na hindi naman talaa tayo nag kikita
+                      tska hindi din ganun masyado nang nag uusap.
+                    </p>
+                    <p className="mt-3 sm:mt-4">
+                      Pero not gonna lie, alam mo ba na iniisip parin kita? hindi lang madalas, kundi palagi. Pasensya na kung minsan napapansin mo na sobrang
+                      downbad ako ha, pero sinusunod ko yung sinasabi mo na piliin ko maging masaya, Gustong gusto kong mag rant sayo about sa mga nangyayare na
+                      sa life ko, pero nahihiya na ko kasi dadagdag pa ba ako sa mga iniisip mo? kung alam mo lang kung gaano kita gusto kausap at kausapin.
+                      Alam ko nasabi ko na sayo to pero ewan, yun talaga nararamdaman ko.
+                    </p>
+                    <p className="mt-3 sm:mt-4">
+                      Kaya kahit mabasa mo lang to, okay na ko. Kahit walang response or anything, okay na ako. Naalala mo yung mga sinabi ko nung unang message
+                      ko? Ganun parin yun walang nag bago. si YODA parin talaga eh. So ayun lang gusto ko lang sabihin sayo Adooy, na kahit anong mangyari,
+                      andito parin ako. Lagi parin kitang susuportahan sa mga goals mo, sa mga pangarap mo, sa mga gusto mong gawin. Lagi parin kitang mamahalin
+                      kahit anong mangyari.
+                    </p>
+                    <p className="mt-3 sm:mt-4">
+                      Bawi ako soon, Roblox ulet tayo. Iiwasan ko na ma end yung streak, ayoko mag promise kasi naka ilang ulet na, pero susubukan ko parin po.
+                      Ingat ka palagi Adooy, at tandaan mo...
+                    </p>
                     <p className="mt-5 sm:mt-6 text-right font-semibold">Mahalaga ka palagi, Merry Christmas! ✨</p>
                   </div>
                 </div>
-
-                
               </div>
             </div>
           </div>

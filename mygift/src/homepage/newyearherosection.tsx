@@ -2,24 +2,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import NewYearNavigation from "../components/newyearnavigation";
 import NewYearFooter from "../components/newyearfooter";
 
+type FWParticle = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  ttl: number;
+  size: number;
+  hue: number;
+  sat: number;
+  lum: number;
+};
+
 export default function NewYearHeroSection() {
-  const flakes = useMemo(
-    () =>
-      Array.from({ length: 18 }).map((_, i) => ({
-        id: i,
-        left: 6 + Math.random() * 88,
-        top: 8 + Math.random() * 55,
-        hue: Math.floor(190 + Math.random() * 140),
-        duration: 1.6 + Math.random() * 1.9,
-        delay: Math.random() * 1.6,
-        size: 2.2 + Math.random() * 2.2,
-        radius: 46 + Math.random() * 64,
-      })),
-    []
-  );
-
-  const fwAngles = useMemo(() => Array.from({ length: 14 }).map((_, i) => (i * 360) / 14), []);
-
   const names = useMemo(() => ["Yodaaaaaaaaaa!", "Jergennnnnnnnn!", "Aila Medel"], []);
   const [nameIndex, setNameIndex] = useState(0);
   const [typed, setTyped] = useState("");
@@ -32,6 +28,7 @@ export default function NewYearHeroSection() {
     const pauseAfterType = 3000;
     const pauseAfterDelete = 250;
     let t: number;
+
     if (phase === "typing") {
       if (typed.length < full.length) t = window.setTimeout(() => setTyped(full.slice(0, typed.length + 1)), typeSpeed);
       else t = window.setTimeout(() => setPhase("pausing"), pauseAfterType);
@@ -46,6 +43,7 @@ export default function NewYearHeroSection() {
         }, pauseAfterDelete);
       }
     }
+
     return () => window.clearTimeout(t);
   }, [typed, phase, nameIndex, names]);
 
@@ -76,11 +74,13 @@ export default function NewYearHeroSection() {
       setTimeout(() => setRings((r) => r.filter((t) => t.id !== id)), 600);
     };
     const up = () => setPressed(false);
+
     window.addEventListener("mousemove", move, { passive: true });
     window.addEventListener("mouseenter", move, { passive: true });
     window.addEventListener("mouseleave", leave);
     window.addEventListener("mousedown", down);
     window.addEventListener("mouseup", up);
+
     return () => {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseenter", move);
@@ -235,17 +235,165 @@ export default function NewYearHeroSection() {
     []
   );
 
-  const bursts = useMemo(
-    () =>
-      Array.from({ length: 5 }).map((_, i) => ({
-        id: i,
-        x: 12 + Math.random() * 76,
-        y: 18 + Math.random() * 42,
-        hue: Math.floor(180 + Math.random() * 160),
-        delay: i * 0.8 + Math.random() * 0.4,
-      })),
-    []
-  );
+  const fwCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const fwRafRef = useRef<number>(0);
+  const fwParticlesRef = useRef<FWParticle[]>([]);
+  const fwLastRef = useRef<number>(0);
+  const fwAccRef = useRef<number>(0);
+  const fwNextSpawnRef = useRef<number>(900);
+  const fwDprRef = useRef<number>(1);
+  const fwBoundsRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
+  const fwActiveRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    const canvas = fwCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    const setSize = () => {
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      fwDprRef.current = dpr;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      fwBoundsRef.current = { w, h };
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const burst = (x: number, y: number, power = 1) => {
+      const count = Math.floor((20 + Math.random() * 18) * power);
+      const baseHue = Math.floor(Math.random() * 360);
+      for (let i = 0; i < count; i++) {
+        const a = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.18;
+        const sp = (2.6 + Math.random() * 3.6) * (0.9 + Math.random() * 0.4) * power;
+        const ttl = 520 + Math.random() * 520;
+        fwParticlesRef.current.push({
+          x,
+          y,
+          vx: Math.cos(a) * sp,
+          vy: Math.sin(a) * sp,
+          life: 0,
+          ttl,
+          size: 1.4 + Math.random() * 2.2,
+          hue: (baseHue + Math.floor(Math.random() * 40)) % 360,
+          sat: 95,
+          lum: 60,
+        });
+      }
+    };
+
+    const spawnRandom = () => {
+      const { w, h } = fwBoundsRef.current;
+      const x = w * (0.12 + Math.random() * 0.76);
+      const y = h * (0.12 + Math.random() * 0.35);
+      const power = openModal || openScroll ? 0.85 : 1;
+      burst(x, y, power);
+    };
+
+    const clickBurst = (clientX: number, clientY: number) => {
+      const { w, h } = fwBoundsRef.current;
+      const x = Math.max(20, Math.min(w - 20, clientX));
+      const y = Math.max(20, Math.min(h - 20, clientY));
+      burst(x, y, 1.05);
+    };
+
+    const onPointerDown = (e: MouseEvent) => clickBurst(e.clientX, e.clientY);
+    const onTouch = (e: TouchEvent) => {
+      if (!e.touches?.length) return;
+      const t = e.touches[0];
+      clickBurst(t.clientX, t.clientY);
+    };
+
+    const onVis = () => {
+      fwActiveRef.current = document.visibilityState === "visible";
+      fwLastRef.current = performance.now();
+    };
+
+    const step = (ts: number) => {
+      fwRafRef.current = requestAnimationFrame(step);
+      if (!fwActiveRef.current) return;
+
+      const last = fwLastRef.current || ts;
+      let dt = ts - last;
+      fwLastRef.current = ts;
+      if (dt > 40) dt = 40;
+
+      const slow = openModal || openScroll;
+      const targetSpawnMin = slow ? 1100 : 750;
+      const targetSpawnMax = slow ? 1900 : 1300;
+
+      fwAccRef.current += dt;
+      if (fwAccRef.current >= fwNextSpawnRef.current) {
+        fwAccRef.current = 0;
+        fwNextSpawnRef.current = targetSpawnMin + Math.random() * (targetSpawnMax - targetSpawnMin);
+        spawnRandom();
+      }
+
+      const particles = fwParticlesRef.current;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.globalCompositeOperation = "lighter";
+
+      const g = 0.0065 * dt;
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life += dt;
+
+        const t = p.life / p.ttl;
+        if (t >= 1) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        p.vx *= 0.992;
+        p.vy = p.vy * 0.992 + g;
+
+        p.x += (p.vx * dt) / 16.67;
+        p.y += (p.vy * dt) / 16.67;
+
+        const a = 1 - t;
+        const fade = a * a;
+        const r = p.size * (0.9 + (1 - t) * 0.7);
+
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${p.hue} ${p.sat}% ${p.lum}% / ${Math.min(0.95, 0.15 + fade * 0.85)})`;
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (!slow && Math.random() < 0.08) {
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${p.hue} 100% 80% / ${0.22 * fade})`;
+          ctx.arc(p.x - p.vx * 0.15, p.y - p.vy * 0.15, r * 1.9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      ctx.globalCompositeOperation = "source-over";
+    };
+
+    setSize();
+    fwLastRef.current = performance.now();
+    fwActiveRef.current = document.visibilityState === "visible";
+
+    window.addEventListener("resize", setSize, { passive: true });
+    window.addEventListener("mousedown", onPointerDown);
+    window.addEventListener("touchstart", onTouch, { passive: true });
+    document.addEventListener("visibilitychange", onVis);
+
+    fwRafRef.current = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(fwRafRef.current);
+      window.removeEventListener("resize", setSize);
+      window.removeEventListener("mousedown", onPointerDown);
+      window.removeEventListener("touchstart", onTouch);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [openModal, openScroll]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-blue-950 font-[Poppins]">
@@ -318,80 +466,6 @@ export default function NewYearHeroSection() {
             100% { transform: perspective(800px) rotate(-4deg) translateY(0) scale(1.02); }
           }
 
-          .x-fw {
-            position: absolute;
-            left: 0;
-            top: 0;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 2;
-          }
-          .x-fw-core{
-            position:absolute;
-            left:50%;
-            top:50%;
-            width: 6px;
-            height: 6px;
-            border-radius: 9999px;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0) 70%);
-            filter: drop-shadow(0 0 18px rgba(255,255,255,.35));
-            animation: x-core var(--dur) ease-out var(--delay) infinite;
-            opacity: 0;
-          }
-          @keyframes x-core{
-            0%{ opacity:0; transform: translate(-50%, 20px) scale(.2); }
-            10%{ opacity:.85; transform: translate(-50%, -12px) scale(.9); }
-            18%{ opacity:0; transform: translate(-50%, -22px) scale(.2); }
-            100%{ opacity:0; transform: translate(-50%, -22px) scale(.2); }
-          }
-          .x-fw-p{
-            position:absolute;
-            left:50%;
-            top:50%;
-            width: var(--sz);
-            height: var(--sz);
-            border-radius: 9999px;
-            transform: translate(-50%, -50%) rotate(var(--a)) translateY(0);
-            background:
-              radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 38%),
-              radial-gradient(circle, hsl(var(--hue) 100% 65% / .92), hsl(calc(var(--hue) + 18) 100% 62% / .62) 48%, rgba(255,255,255,0) 78%);
-            box-shadow:
-              0 0 22px hsl(var(--hue) 100% 70% / .42),
-              0 0 34px hsl(calc(var(--hue) + 30) 100% 68% / .20);
-            opacity: 0;
-            animation: x-pop var(--dur) ease-out var(--delay) infinite;
-          }
-          @keyframes x-pop{
-            0%{ opacity:0; transform: translate(-50%, 22px) rotate(var(--a)) translateY(0) scale(.55); filter: blur(.18px); }
-            12%{ opacity:0; transform: translate(-50%, 10px) rotate(var(--a)) translateY(0) scale(.7); }
-            18%{ opacity: 1; transform: translate(-50%, -10px) rotate(var(--a)) translateY(0) scale(1.05); }
-            44%{ opacity: .95; transform: translate(-50%, -10px) rotate(var(--a)) translateY(calc(var(--r) * -1px)) scale(.98); }
-            72%{ opacity: .18; transform: translate(-50%, -10px) rotate(var(--a)) translateY(calc(var(--r) * -1px)) scale(.78); filter: blur(.75px); }
-            100%{ opacity:0; transform: translate(-50%, -10px) rotate(var(--a)) translateY(calc(var(--r) * -1px)) scale(.62); filter: blur(1.1px); }
-          }
-          .x-fw-fade{
-            position:absolute;
-            left:50%;
-            top:50%;
-            width: calc(var(--r) * 2px);
-            height: calc(var(--r) * 2px);
-            border-radius: 9999px;
-            transform: translate(-50%, -50%);
-            background:
-              radial-gradient(circle, hsl(var(--hue) 100% 70% / .26), hsl(calc(var(--hue) + 40) 100% 68% / .14) 38%, rgba(255,255,255,0) 62%);
-            filter: blur(5px);
-            opacity: 0;
-            animation: x-bloom var(--dur) ease-out var(--delay) infinite;
-          }
-          @keyframes x-bloom{
-            0%{ opacity:0; transform: translate(-50%, 22px) scale(.15); }
-            18%{ opacity: .0; transform: translate(-50%, -10px) scale(.2); }
-            34%{ opacity: .6; transform: translate(-50%, -10px) scale(1.02); }
-            70%{ opacity: .14; transform: translate(-50%, -10px) scale(1.1); }
-            100%{ opacity:0; transform: translate(-50%, -10px) scale(1.14); }
-          }
-
           .ny-modal{
             animation: nyFadeIn .24s ease-out both;
             background-image:
@@ -425,13 +499,6 @@ export default function NewYearHeroSection() {
           .ny-confetti{ position:absolute; top:-6vh; width:var(--sz); height:var(--sz); border-radius:2px; transform: translateY(-10vh) rotate(var(--rot)); background: hsl(var(--h) 90% 60% / .95); box-shadow: 0 0 8px hsl(var(--h) 100% 70% / .4); animation: nyConfetti var(--dur) cubic-bezier(.2,.7,.2,1) var(--delay) infinite; opacity:.95 }
           @keyframes nyConfetti{ 0%{ transform: translateY(-10vh) translateX(0) rotate(var(--rot)); opacity:.95 } 60%{ transform: translateY(55vh) translateX(8px) rotate(calc(var(--rot) + 180deg)) } 100%{ transform: translateY(110vh) translateX(-6px) rotate(calc(var(--rot) + 360deg)); opacity:.85 } }
 
-          .ny-burst{ position:absolute; left:var(--x); top:var(--y); pointer-events:none; width:1px; height:1px; }
-          .ny-burst .p{ position:absolute; left:0; top:0; width:6px; height:6px; border-radius:9999px; background: radial-gradient(circle, #fff, rgba(255,255,255,.1) 70%); box-shadow: 0 0 14px hsl(var(--hu) 100% 70% / .5); transform: translate(-50%,-50%) rotate(var(--a)) translateY(0) scale(.6); opacity:0; animation: nyBurst 2s ease-out var(--delay) infinite }
-          @keyframes nyBurst{ 0%{ opacity:0; transform: translate(-50%,-50%) rotate(var(--a)) translateY(0) scale(.4) } 10%{ opacity:1 } 40%{ transform: translate(-50%,-50%) rotate(var(--a)) translateY(-56px) scale(1) } 70%{ opacity:.15; transform: translate(-50%,-50%) rotate(var(--a)) translateY(-84px) scale(.9) } 100%{ opacity:0; transform: translate(-50%,-50%) rotate(var(--a)) translateY(-98px) scale(.8) }
-
-          .ny-lantern{ position:absolute; bottom:-12vh; left:var(--left); width:var(--sz); height:calc(var(--sz) * 1.2); border-radius:10px; background: radial-gradient(40% 40% at 50% 50%, rgba(255,255,255,.85), rgba(255,220,160,.75) 60%, rgba(255,160,80,.55)); box-shadow: 0 0 24px rgba(255,200,120,.75), 0 0 60px rgba(255,160,80,.55); transform: translateY(0) translateX(0) scale(1); animation: lanternFloat var(--dur) ease-in-out var(--delay) infinite }
-          @keyframes lanternFloat{ 0%{ transform: translateY(6vh) translateX(-6px) } 50%{ transform: translateY(-46vh) translateX(6px) } 100%{ transform: translateY(-96vh) translateX(0) } }
-
           .ny-rim{ position:absolute; inset:-2px; border-radius: 1.6rem; background: conic-gradient(from var(--ang), rgba(147,197,253,.0) 0deg, rgba(147,197,253,.35) 120deg, rgba(255,255,255,0) 300deg); filter: blur(10px); animation: rimSpin 6s linear infinite }
           @keyframes rimSpin{ to{ --ang: 360deg } }
 
@@ -447,45 +514,12 @@ export default function NewYearHeroSection() {
 
       <img src={cursorUrl} alt="" className="hidden" />
 
+      <canvas ref={fwCanvasRef} className="pointer-events-none fixed inset-0 z-0" style={{ mixBlendMode: "screen" }} />
+
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 -left-24 h-60 w-60 sm:h-72 sm:w-72 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -bottom-24 -right-24 h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-emerald-300/10 blur-3xl" />
         <div className="absolute left-1/2 top-16 sm:top-20 h-44 w-44 sm:h-56 sm:w-56 -translate-x-1/2 rounded-full bg-sky-300/10 blur-3xl" />
-      </div>
-
-      <div className="pointer-events-none absolute inset-0">
-        {flakes.map((f) => (
-          <div
-            key={f.id}
-            className="x-fw"
-            style={
-              {
-                left: `${f.left}%`,
-                top: `${f.top}%`,
-                ["--hue" as any]: f.hue,
-                ["--dur" as any]: `${f.duration}s`,
-                ["--delay" as any]: `${f.delay}s`,
-                ["--sz" as any]: `${f.size}px`,
-                ["--r" as any]: f.radius,
-              } as React.CSSProperties
-            }
-          >
-            <span className="x-fw-fade" />
-            <span className="x-fw-core" />
-            {fwAngles.map((a) => (
-              <span
-                key={`${f.id}-${a}`}
-                className="x-fw-p"
-                style={
-                  {
-                    ["--a" as any]: `${a}deg`,
-                    ["--hue" as any]: (f.hue + ((a / 360) * 140) * 0.9) % 360,
-                  } as React.CSSProperties
-                }
-              />
-            ))}
-          </div>
-        ))}
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 py-8 sm:py-14 x-tight-pad">
@@ -717,24 +751,6 @@ export default function NewYearHeroSection() {
                       } as React.CSSProperties
                     }
                   />
-                ))}
-                {bursts.map((b) => (
-                  <div
-                    key={`b-${b.id}`}
-                    className="ny-burst"
-                    style={
-                      {
-                        ["--x" as any]: `${b.x}%`,
-                        ["--y" as any]: `${b.y}%`,
-                        ["--hu" as any]: b.hue,
-                        ["--delay" as any]: `${b.delay}s`,
-                      } as React.CSSProperties
-                    }
-                  >
-                    {fwAngles.map((a, i) => (
-                      <span key={`bp-${b.id}-${i}`} className="p" style={{ ["--a" as any]: `${a}deg` } as React.CSSProperties} />
-                    ))}
-                  </div>
                 ))}
               </div>
 

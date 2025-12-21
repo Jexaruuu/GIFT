@@ -12,45 +12,53 @@ export default function NewYearNavigation() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playlist = [
-    { title: "MAKI - Kahel na langit", src: "/kahel-na-langit.mp3", img: "/kahel-na-langit.jpg" },
+    { title: "Aya - EARL AGUSTIN ", src: "/aya.mp3", img: "/aya.jpg" },
 
-    { title: "DECEMBER AVENUE - Bulong", src: "/bulong.mp3", img: "/bulong.jpg" },
+    { title: "Kahel na langit - MAKI ", src: "/kahel-na-langit.mp3", img: "/kahel-na-langit.jpg" },
 
-    { title: "FITTERKARMA - Kalapastanganan", src: "/kalapastanganan.mp3", img: "/kalapastanganan.jpg" },
+    { title: "Hindi Ako Mawawala - EL MANU ", src: "/hindi-ako-mawawala.mp3", img: "/hindi-ako-mawawala.png" },
 
-    { title: "YDEN - Ngalan Mo", src: "/ngalan-mo.mp3", img: "/ngalan-mo.png" },
+    { title: "Libo Libong Buwan - KYLE RAPHAEL", src: "/libo-libong-buwan.mp3", img: "/libo-libong-buwan.png" },
+
+    { title: "Naiilang - LE JOHN ", src: "/naiilang.mp3", img: "/naiilang.png" },
+
+    { title: "Panaginip - NICOLE ", src: "/panaginip.mp3", img: "/panaginip.jpg" },
+
+    { title: "Bulong - DECEMBER AVENUE", src: "/bulong.mp3", img: "/bulong.jpg" },
+
+    { title: "Kalapastanganan - FITTERKARMA", src: "/kalapastanganan.mp3", img: "/kalapastanganan.jpg" },
+
+    { title: "Ngalan Mo - YDEN", src: "/ngalan-mo.mp3", img: "/ngalan-mo.png" },
     
-    { title: "ELIZA MATURAN - Museo", src: "/museo.mp3", img: "/museo.jpg" },
+    { title: "Museo - ELIZA MATURAN", src: "/museo.mp3", img: "/museo.jpg" },
 
-    { title: "EARL AGUSTIN - Tibok", src: "/tibok.mp3", img: "/tibok.png" },
+    { title: "Tibok - EARL AGUSTIN", src: "/tibok.mp3", img: "/tibok.png" },
 
-    { title: "ARTHUR NERY - Isa Lang", src: "/isa-lang.mp3", img: "/isa-lang.jpg" },
+    { title: "Isa Lang - ARTHUR NERY", src: "/isa-lang.mp3", img: "/isa-lang.jpg" },
 
-    { title: "ADIE - Mahika", src: "/mahika.mp3", img: "/mahika.jpg" },
+    { title: "Mahika - ADIE", src: "/mahika.mp3", img: "/mahika.jpg" },
 
-    { title: "RHODESSA - Kisame", src: "/kisame.mp3", img: "/kisame.jpg" },
+    { title: "Kisame - RHODESSA", src: "/kisame.mp3", img: "/kisame.jpg" },
 
-    { title: "FITTERKARMA - Pagibig ay Kanibalismo II", src: "/pagibig-ay-kanibalismo.mp3", img: "/pagibig-ay-kanibalismo.png" },
+    { title: "Pagibig ay Kanibalismo II - FITTERKARMA", src: "/pagibig-ay-kanibalismo.mp3", img: "/pagibig-ay-kanibalismo.png" },
 
-    { title: "KIYO - Ikaw Lang", src: "/ikaw-lang.mp3", img: "/ikaw-lang.jpg" },
+    { title: "Ikaw Lang - KIYO", src: "/ikaw-lang.mp3", img: "/ikaw-lang.jpg" },
 
-    { title: "KIYO X ALISSON SHORE - Urong Sulong", src: "/urong-sulong.mp3", img: "/urong-sulong.jpg" },
+    { title: "Aura - IV OF SPADE", src: "/aura.mp3", img: "/aura.jpg" },
 
-    { title: "IV OF SPADE - Aura", src: "/aura.mp3", img: "/aura.jpg" },
+    { title: "Eba - KIYO", src: "/eba.mp3", img: "/eba.jpg" },
 
-    { title: "KIYO - Eba", src: "/eba.mp3", img: "/eba.jpg" },
+    { title: "Mata sa Mata - 7TH", src: "/mata-sa-mata.mp3", img: "/mata-sa-mata.jpg" },
 
-    { title: "7TH - Mata sa Mata", src: "/mata-sa-mata.mp3", img: "/mata-sa-mata.jpg" },
+    { title: "Ligaya - MRLD", src: "/ligaya.mp3", img: "/ligaya.png" },
 
-    { title: "MRLD - Ligaya", src: "/ligaya.mp3", img: "/ligaya.png" },
+    { title: "Bahala Na - KENANIAH", src: "/bahala-na.mp3", img: "/bahala-na.jpg" },
 
-    { title: "KENANIAH - Bahala Na", src: "/bahala-na.mp3", img: "/bahala-na.jpg" },
+    { title: "Kung Maging Akin Ka - SUGARCANE", src: "/kung-maging-akin-ka.mp3", img: "/kung-maging-akin-ka.png" },
 
-    { title: "SUGARCANE - Kung Maging Akin Ka", src: "/kung-maging-akin-ka.mp3", img: "/kung-maging-akin-ka.png" },
+    { title: "Sila - SUD", src: "/sila.mp3", img: "/sila.jpg" },
 
-    { title: "SUD - Sila", src: "/sila.mp3", img: "/sila.jpg" },
-
-    { title: "UP DHARMA DOWN - Tadhana", src: "/tadhana.mp3", img: "/tadhana.png" },
+    { title: "Tadhana - UP DHARMA DOWN", src: "/tadhana.mp3", img: "/tadhana.png" },
   ];
 
   useEffect(() => {
