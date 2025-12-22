@@ -166,12 +166,15 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
     ];
   }, []);
 
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [, setReplyText] = useState("");
+
   useEffect(() => {
-    document.body.style.overflow = openModal || openScroll ? "hidden" : "";
+    document.body.style.overflow = openModal || openScroll || replyOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [openModal, openScroll]);
+  }, [openModal, openScroll, replyOpen]);
 
   const dragWrapRef = useRef<HTMLDivElement | null>(null);
   const dragTrackRef = useRef<HTMLDivElement | null>(null);
@@ -248,6 +251,10 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
   const onUp = () => {
     setIsDragging(false);
     velRef.current = Math.max(Math.min(velRef.current, 20), -20) * 0.2;
+  };
+
+  const goToBottle = () => {
+    window.location.href = "https://messageinthebottle.vercel.app/";
   };
 
   return (
@@ -647,7 +654,14 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
         <div className="fixed inset-0 z-10001 flex items-center justify-center bg-black/60 backdrop-blur">
           <div className="relative w-full max-w-3xl px-3 sm:px-4">
             <div className="flex items-start justify-end mb-2 sm:mb-3 px-1 pt-2">
-              <button onClick={() => setOpenScroll(false)} className="rounded-xl border border-white/20 px-3 py-2 text-white/90 hover:bg-white/10 active:scale-95">
+              <button
+                onClick={() => {
+                  setOpenScroll(false);
+                  setReplyOpen(false);
+                  setReplyText("");
+                }}
+                className="rounded-xl border border-white/20 px-3 py-2 text-white/90 hover:bg-white/10 active:scale-95"
+              >
                 ✕
               </button>
             </div>
@@ -702,8 +716,8 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
                 <div className="mt-5 sm:mt-6 rounded-2xl border border-blue-100/25 bg-white/10">
                   <div className="max-h-[48vh] sm:max-h-[56vh] overflow-y-auto x-scroll-pretty px-5 sm:px-7 py-5 sm:py-6 text-white/90 text-[clamp(13px,3.6vw,16px)] leading-7 text-justify">
                     <p>
-                      Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby
-                      aquiiii at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy. Sana okay lang ikaw palagi Adoooooy.
+                      Hello Adooooyyyyy, kumusta? Eto nanaman ako mangungulit hehe, by the way I just wanna say Merry Christmas sa'yo at tska kay baby aquiiii
+                      at syempre sa family mo din. I hope na sana okay lang kayo dyan and healthy. Sana okay lang ikaw palagi Adoooooy.
                     </p>
                     <p className="mt-3 sm:mt-4">
                       Hindi ko na din talaga alam ano sasabihin ko sayo kasi nasabi ko na lahat, pero ewan ko ba? nag eenjoy parin ako gumawa ng mga surprise
@@ -729,6 +743,67 @@ export default function HeroSection({ onNewYear }: { onNewYear?: () => void } = 
                     </p>
                     <p className="mt-5 sm:mt-6 text-right font-semibold">Mahalaga ka palagi, Merry Christmas! ✨</p>
                   </div>
+                </div>
+
+                <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => setReplyOpen(true)}
+                    className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]"
+                  >
+                    Reply to the message
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {replyOpen && (
+        <div className="fixed inset-0 z-10002 flex items-center justify-center bg-black/70 backdrop-blur">
+          <div className="relative w-full max-w-xl px-3 sm:px-4">
+            <div className="relative mx-auto w-full ny-modal rounded-3xl border border-blue-100/25 backdrop-blur-2xl shadow-[0_30px_80px_rgba(2,6,23,0.65)] overflow-hidden">
+              <div className="ny-sheen pointer-events-none"></div>
+
+              <div className="flex items-start justify-between px-4 sm:px-6 pt-4 sm:pt-5">
+                <div className="min-w-0">
+                  <div className="text-white font-semibold text-lg sm:text-xl">Hello!</div>
+                  <div className="text-white/70 text-xs sm:text-sm mt-1">
+                    If you continue, you will be redirected to <span className="text-white/90 font-semibold">messageinthebottle</span>.
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setReplyOpen(false);
+                    setReplyText("");
+                  }}
+                  className="shrink-0 rounded-xl border border-white/20 px-3 py-2 text-white/90 hover:bg-white/10 active:scale-95"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="px-4 sm:px-6 pt-4 pb-5 sm:pb-6">
+                <div className="rounded-2xl border border-white/15 bg-white/10 px-4 sm:px-5 py-4 text-white/85 text-sm sm:text-base leading-7">
+                  Kung gusto mo mag reply adoy, message ka lang. ako na bahala humanap ng minessage mo okay? Thankyouuuuu adoy!
+                </div>
+
+                <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => {
+                      setReplyOpen(false);
+                      setReplyText("");
+                    }}
+                    className="w-full sm:w-auto rounded-2xl border border-white/15 bg-white/10 px-5 py-3 font-semibold text-white shadow-sm hover:bg-white/15 active:scale-[0.99]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={goToBottle}
+                    className="w-full sm:w-auto rounded-2xl border border-blue-400/40 bg-blue-500 px-5 py-3 font-semibold text-white shadow-sm hover:bg-blue-600 active:scale-[0.99]"
+                  >
+                    Continue
+                  </button>
                 </div>
               </div>
             </div>
