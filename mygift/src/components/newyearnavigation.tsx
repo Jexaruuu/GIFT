@@ -16,6 +16,8 @@ export default function NewYearNavigation() {
 
     { title: "Kahel na langit - MAKI ", src: "/kahel-na-langit.mp3", img: "/kahel-na-langit.jpg" },
 
+    { title: "Kisame - RHODESSA", src: "/kisame.mp3", img: "/kisame.jpg" },
+
     { title: "Hindi Ako Mawawala - EL MANU ", src: "/hindi-ako-mawawala.mp3", img: "/hindi-ako-mawawala.png" },
 
     { title: "Libo Libong Buwan - KYLE RAPHAEL", src: "/libo-libong-buwan.mp3", img: "/libo-libong-buwan.png" },
@@ -37,8 +39,6 @@ export default function NewYearNavigation() {
     { title: "Isa Lang - ARTHUR NERY", src: "/isa-lang.mp3", img: "/isa-lang.jpg" },
 
     { title: "Mahika - ADIE", src: "/mahika.mp3", img: "/mahika.jpg" },
-
-    { title: "Kisame - RHODESSA", src: "/kisame.mp3", img: "/kisame.jpg" },
 
     { title: "Pagibig ay Kanibalismo II - FITTERKARMA", src: "/pagibig-ay-kanibalismo.mp3", img: "/pagibig-ay-kanibalismo.png" },
 
